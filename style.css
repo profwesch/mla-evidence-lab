@@ -177,6 +177,9 @@ h1, h2, h3, h4 {
 }
 .module-label { flex: 1; }
 
+.sidebar-actions { border-top: 1px solid var(--border); padding: 16px; }
+.reset-progress-btn { width: 100%; justify-content: center; margin-top: 0; }
+
 /* ---------- Content ---------- */
 .content { min-width: 0; }
 

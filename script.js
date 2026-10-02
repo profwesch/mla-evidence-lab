@@ -58,10 +58,67 @@
       var raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return defaultState();
       var parsed = JSON.parse(raw);
-      var merged = defaultState();
-      for (var k in parsed) if (Object.prototype.hasOwnProperty.call(parsed, k)) merged[k] = parsed[k];
-      return merged;
+      if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) throw new Error("Invalid saved state");
+
+      var repaired = defaultState();
+      var savedCompleted = parsed.completed && typeof parsed.completed === "object" ? parsed.completed : {};
+      var sequenceIntact = true;
+      MODULES.forEach(function (module) {
+        if (sequenceIntact && savedCompleted[module.id] === true) {
+          repaired.completed[module.id] = true;
+        } else {
+          sequenceIntact = false;
+        }
+      });
+
+      if (parsed.quiz && typeof parsed.quiz === "object") {
+        if (parsed.quiz.partsAnswer === null || typeof parsed.quiz.partsAnswer === "string") repaired.quiz.partsAnswer = parsed.quiz.partsAnswer;
+        if (typeof parsed.quiz.partsCorrect === "boolean") repaired.quiz.partsCorrect = parsed.quiz.partsCorrect;
+      }
+
+      ["verb", "pagenum"].forEach(function (key) {
+        if (!parsed[key] || typeof parsed[key] !== "object") return;
+        if (parsed[key].answer === null || typeof parsed[key].answer === "string") repaired[key].answer = parsed[key].answer;
+        if (typeof parsed[key].correct === "boolean") repaired[key].correct = parsed[key].correct;
+      });
+
+      if (parsed.order && typeof parsed.order === "object") {
+        var ids = ["state", "acknowledge", "pivot", "rebut"];
+        var arrangement = parsed.order.arrangement;
+        if (Array.isArray(arrangement) && arrangement.length === ids.length &&
+            ids.every(function (id) { return arrangement.indexOf(id) !== -1; })) {
+          repaired.order.arrangement = arrangement.slice();
+        }
+        if (typeof parsed.order.correct === "boolean") repaired.order.correct = parsed.order.correct;
+      }
+
+      if (parsed.coach && typeof parsed.coach === "object") {
+        ["coach1", "coach2", "coach3"].forEach(function (id) {
+          var savedCoach = parsed.coach[id];
+          if (!savedCoach || typeof savedCoach !== "object") return;
+          if (typeof savedCoach.text === "string") repaired.coach[id].text = savedCoach.text;
+          if (typeof savedCoach.checked === "boolean") repaired.coach[id].checked = savedCoach.checked;
+          if (typeof savedCoach.markedDone === "boolean") repaired.coach[id].markedDone = savedCoach.markedDone;
+        });
+      }
+
+      if (parsed.checklist && typeof parsed.checklist === "object") {
+        CHECKLIST_ITEMS.forEach(function (_, i) {
+          var key = "item" + i;
+          if (typeof parsed.checklist[key] === "boolean") repaired.checklist[key] = parsed.checklist[key];
+        });
+      }
+      if (typeof parsed.studentName === "string") repaired.studentName = parsed.studentName;
+
+      var savedIndex = moduleIndex(parsed.currentModule);
+      if (savedIndex === 0 || (savedIndex > 0 && repaired.completed[MODULES[savedIndex - 1].id])) {
+        repaired.currentModule = parsed.currentModule;
+      }
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(repaired));
+      return repaired;
     } catch (err) {
+      try { localStorage.removeItem(STORAGE_KEY); } catch (storageErr) { /* localStorage unavailable */ }
       return defaultState();
     }
   }
@@ -72,6 +129,17 @@
     } catch (err) {
       /* localStorage unavailable; progress just won't persist across visits */
     }
+  }
+
+  function resetProgress() {
+    if (!window.confirm("Reset all progress? This will erase your completed modules, saved writing, checklist, and certificate name.")) return;
+    try { localStorage.removeItem(STORAGE_KEY); } catch (err) { /* localStorage unavailable */ }
+    state = defaultState();
+    renderSidebar();
+    renderProgress();
+    renderModule();
+    document.getElementById("main").focus();
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   function moduleIndex(id) {
@@ -750,6 +818,7 @@
 
   /* ---------------- Init ---------------- */
   function init() {
+    document.getElementById("reset-progress-btn").addEventListener("click", resetProgress);
     renderSidebar();
     renderProgress();
     renderModule();
