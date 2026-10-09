@@ -4,7 +4,235 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>MLA Evidence Integration Lab</title>
-<link rel="stylesheet" href="style.css" />
+<style>
+:root {
+  --navy: #1b2a4a;
+  --navy-dark: #101a30;
+  --blue: #2c5aa0;
+  --teal: #1f8a8c;
+  --gold: #c99a3b;
+  --gold-light: #f4e3bd;
+  --ink: #1c1f26;
+  --paper: #ffffff;
+  --paper-soft: #f6f7fb;
+  --border: #e0e3ec;
+  --green: #2f8a4b;
+  --red: #b3423a;
+  --radius: 10px;
+  --shadow: 0 2px 10px rgba(16, 26, 48, 0.08);
+  font-size: 16px;
+}
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0;
+  background: var(--paper-soft);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.55;
+}
+h1, h2, h3, h4 { font-family: Georgia, "Times New Roman", serif; color: var(--navy); line-height: 1.25; }
+.skip-link { position: absolute; left: -999px; background: var(--gold); color: var(--navy-dark); padding: 10px 16px; border-radius: 6px; z-index: 100; }
+.skip-link:focus { left: 12px; top: 12px; }
+
+/* Masthead */
+.masthead { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%); color: #fff; padding: clamp(24px, 4vw, 40px) clamp(20px, 5vw, 56px); }
+.masthead-inner { max-width: 980px; margin: 0 auto; }
+.eyebrow { text-transform: uppercase; letter-spacing: 0.14em; font-size: 0.75rem; color: var(--gold-light); margin: 0 0 6px; font-weight: 600; }
+.masthead h1 { color: #fff; font-size: clamp(1.6rem, 3.4vw, 2.4rem); margin: 0 0 10px; }
+.masthead .subtitle { color: #dbe2f0; font-size: clamp(0.95rem, 1.6vw, 1.05rem); max-width: 640px; margin: 0; }
+.progress-wrap { max-width: 980px; margin: 22px auto 0; }
+.progress-label { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--gold-light); margin-bottom: 6px; font-weight: 600; }
+.progress-bar-track { background: rgba(255,255,255,0.15); border-radius: 999px; height: 10px; overflow: hidden; }
+.progress-bar-fill { background: linear-gradient(90deg, var(--gold) 0%, var(--teal) 100%); height: 100%; border-radius: 999px; transition: width 0.4s ease; }
+
+/* Layout */
+.layout { max-width: 1180px; margin: 0 auto; padding: clamp(16px, 3vw, 32px); display: grid; grid-template-columns: 260px 1fr; gap: 28px; align-items: start; }
+.sidebar { position: sticky; top: 20px; background: var(--paper); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 10px; max-height: calc(100vh - 40px); overflow-y: auto; }
+.module-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.module-list li.optional-divider { border-top: 1px dashed var(--border); margin: 8px 4px 4px; padding-top: 8px; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #7c8394; font-weight: 700; }
+.module-nav-btn { width: 100%; text-align: left; background: none; border: none; border-radius: 8px; padding: 10px 12px; font-size: 0.9rem; color: var(--ink); cursor: pointer; display: flex; align-items: center; gap: 10px; font-family: inherit; }
+.module-nav-btn:hover:not([disabled]) { background: var(--paper-soft); }
+.module-nav-btn.active { background: var(--navy); color: #fff; }
+.module-nav-btn.active .module-status { color: var(--gold-light); }
+.module-nav-btn[disabled] { color: #9aa2b1; cursor: not-allowed; }
+.module-status { flex: none; width: 22px; height: 22px; border-radius: 50%; border: 2px solid currentColor; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; }
+.module-nav-btn.complete .module-status { background: var(--green); border-color: var(--green); color: #fff; }
+.module-nav-btn.optional .module-status { border-style: dashed; }
+.module-label { flex: 1; }
+
+/* Content */
+.content { min-width: 0; outline: none; }
+.card { background: var(--paper); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: clamp(18px, 3vw, 32px); margin-bottom: 20px; }
+.card h2 { margin-top: 0; font-size: 1.5rem; border-bottom: 3px solid var(--gold); padding-bottom: 10px; }
+.card h3 { font-size: 1.15rem; margin-top: 28px; }
+.callout { background: var(--paper-soft); border-left: 4px solid var(--teal); border-radius: 6px; padding: 14px 18px; margin: 16px 0; }
+.callout.gold { border-left-color: var(--gold); }
+.callout.never { background: #fdefee; border: 2px solid var(--red); border-left-width: 6px; }
+.callout.never strong { color: var(--red); font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.callout.never ul { list-style: none; padding-left: 0; }
+.callout.never li { color: #7c2a24; font-weight: 600; padding-left: 28px; position: relative; }
+.callout.never li::before { content: "\2716"; position: absolute; left: 4px; color: var(--red); }
+.callout strong { color: var(--navy); }
+.callout ul { margin: 8px 0 0; padding-left: 22px; }
+.callout li { margin: 4px 0; }
+.example-box { background: #fbf8f0; border: 1px dashed var(--gold); border-radius: 8px; padding: 14px 18px; margin: 14px 0; font-size: 0.96rem; }
+.hl { color: var(--red); font-weight: 700; }
+.hl-dot { font-size: 1.5em; line-height: 0; padding: 0 1px; }
+.example-box .label { text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.08em; font-weight: 700; color: var(--gold); display: block; margin-bottom: 6px; }
+.fx { border-radius: 4px; padding: 1px 2px; transition: background .25s, box-shadow .25s; }
+.fx.on { background: var(--gold-light); box-shadow: 0 0 0 2px var(--gold); font-weight: 700; color: var(--navy); }
+.fx-dot.on { padding: 1px 5px; }
+.sp-underline { text-decoration: underline; text-decoration-color: var(--gold); text-decoration-thickness: 3px; text-underline-offset: 4px; }
+.card h4 { font-size: 1rem; margin: 22px 0 6px; color: var(--teal); }
+.formula-steps { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 4px 0 8px; }
+.fs-step { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px 6px 6px; border-radius: 999px; border: 1.5px solid var(--border); font-size: 0.85rem; font-weight: 600; color: #6b7385; background: #fff; }
+.fs-step b { width: 22px; height: 22px; border-radius: 50%; background: var(--border); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; }
+.fs-step.current { border-color: var(--navy); color: var(--navy); }
+.fs-step.current b { background: var(--navy); }
+.fs-step.done { border-color: #bfe6ca; color: var(--green); background: #eefaf1; }
+.fs-step.done b { background: var(--green); }
+.fs-plus { color: #9aa2b1; font-weight: 700; }
+.right-wrong { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 0; }
+.right-wrong div { border-radius: 8px; padding: 10px 14px; font-size: 0.95rem; }
+.right-wrong .rw-right { background: #eefaf1; border: 1px solid #bfe6ca; }
+.right-wrong .rw-wrong { background: #fdefee; border: 1px solid #f3c8c4; }
+.right-wrong .tag { display: block; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px; }
+
+/* Roadmap: all five steps on one line */
+.roadmap { display: flex; flex-wrap: nowrap; gap: 6px; align-items: stretch; margin: 20px 0; }
+.roadmap-step { flex: 1 1 0; min-width: 0; background: var(--navy); color: #fff; padding: 10px 4px; border-radius: 8px; font-size: clamp(0.72rem, 1.15vw, 0.84rem); white-space: nowrap; font-weight: 600; text-align: center; display: flex; flex-direction: column; justify-content: center; }
+.roadmap-step small { font-weight: 500; opacity: 0.85; white-space: normal; line-height: 1.25; margin-top: 2px; }
+.roadmap-step.counterclaim { background: var(--teal); }
+.roadmap-arrow { flex: none; color: var(--blue); font-size: 1.1rem; display: flex; align-items: center; }
+
+/* Multiple choice */
+.q-meta { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin: 22px 0 6px; font-size: 0.85rem; font-weight: 700; color: var(--teal); text-transform: uppercase; letter-spacing: 0.06em; }
+.q-dots { display: flex; gap: 5px; }
+.q-dots span { width: 11px; height: 11px; border-radius: 50%; background: var(--border); }
+.q-dots span.done { background: var(--green); }
+.q-dots span.current { background: var(--gold); }
+.q-prompt { font-size: 1rem; }
+.choice-group { display: flex; flex-direction: column; gap: 10px; margin: 16px 0; }
+.choice-btn { text-align: left; border: 1.5px solid var(--border); background: var(--paper); border-radius: 8px; padding: 12px 16px; cursor: pointer; font-family: inherit; font-size: 0.95rem; color: var(--ink); }
+.choice-btn:hover:not([disabled]) { border-color: var(--blue); }
+.choice-btn.correct { border-color: var(--green); background: #eefaf1; }
+.choice-btn.incorrect { border-color: var(--red); background: #fdefee; text-decoration: line-through; text-decoration-color: rgba(179,66,58,0.5); }
+.choice-btn[disabled] { cursor: default; }
+.wc-entry { background: var(--paper-soft); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px 12px calc(16px + 2em); text-indent: -2em; font-family: Georgia, "Times New Roman", serif; margin: 10px 0; }
+.wc-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--navy); margin-top: 14px; display: block; }
+
+.feedback-msg { margin-top: 12px; padding: 12px 16px; border-radius: 8px; font-size: 0.95rem; }
+.feedback-msg.good { background: #eefaf1; color: #1e5c33; border: 1px solid #bfe6ca; }
+.feedback-msg.bad { background: #fdefee; color: #7c2a24; border: 1px solid #f3c8c4; }
+.feedback-msg ul { margin: 8px 0 0; padding-left: 20px; }
+.feedback-msg li { margin: 6px 0; }
+
+/* Buttons */
+.btn { display: inline-flex; align-items: center; gap: 8px; background: var(--blue); color: #fff; border: none; border-radius: 8px; padding: 11px 22px; font-size: 0.95rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+.btn:hover { background: var(--navy); }
+.btn.secondary { background: transparent; color: var(--blue); border: 1.5px solid var(--blue); }
+.btn.secondary:hover { background: var(--paper-soft); }
+.btn[disabled] { background: #b9bfcc; cursor: not-allowed; }
+.btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; align-items: center; }
+
+/* Drag-to-order list */
+.order-list { list-style: none; margin: 16px 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.order-item { border: 1.5px solid var(--border); border-radius: 8px; padding: 12px 14px; background: var(--paper); display: flex; align-items: center; gap: 12px; cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; }
+.order-item:hover { border-color: var(--blue); }
+.order-item.dragging { cursor: grabbing; box-shadow: 0 10px 28px rgba(16,26,48,0.22); border-color: var(--blue); }
+.order-item.correct-position { border-color: var(--green); background: #eefaf1; }
+.order-item.wrong-position { border-color: var(--red); background: #fdefee; }
+.order-placeholder { border: 2px dashed var(--blue); border-radius: 8px; background: #eef3fb; }
+.order-handle { color: #9aa2b1; font-size: 1.2rem; flex: none; }
+.order-num { flex: none; width: 26px; height: 26px; border-radius: 50%; background: var(--navy); color: #fff; font-size: 0.8rem; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; }
+.hint { font-size: 0.85rem; color: #5d6577; }
+
+/* Sentence builder */
+.formula-slots { display: grid; grid-template-columns: 2fr 3fr 1.4fr 0.7fr; gap: 8px; margin: 16px 0; }
+.slot { border: 2px dashed #b9c2d6; border-radius: 10px; padding: 8px; min-height: 92px; background: var(--paper-soft); display: flex; flex-direction: column; gap: 6px; cursor: pointer; transition: border-color .15s, background .15s; }
+.slot.hover, .slot:focus-visible { border-color: var(--blue); background: #eef3fb; }
+.slot.armed { border-color: var(--gold); }
+.slot.correct { border-style: solid; border-color: var(--green); background: #eefaf1; }
+.slot.incorrect { border-style: solid; border-color: var(--red); background: #fdefee; }
+.slot-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--teal); }
+.slot-drop { flex: 1; display: flex; align-items: center; }
+.chip-bank { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px; border: 1px solid var(--border); border-radius: 10px; min-height: 64px; background: #fff; }
+.chip-bank.hover { border-color: var(--blue); background: #eef3fb; }
+.chip-bank-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #5d6577; margin: 14px 0 6px; display: block; }
+.chip { font-family: inherit; font-size: 0.92rem; color: var(--ink); background: #fff; border: 1.5px solid var(--navy); border-radius: 8px; padding: 8px 12px; cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; text-align: left; line-height: 1.35; }
+.slot .chip { width: 100%; }
+.chip:hover { background: #f3f6fc; }
+.chip.selected { background: var(--gold-light); border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,154,59,0.3); }
+.chip.drag-source { opacity: 0.35; }
+.chip.ghost { position: fixed; z-index: 1000; pointer-events: none; box-shadow: 0 10px 28px rgba(16,26,48,0.25); cursor: grabbing; max-width: 360px; }
+.built-sentence { font-family: Georgia, serif; font-size: 1.05rem; margin-top: 6px; }
+
+/* Paragraph checker */
+.checker-options { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 16px 0; }
+.opt-group { border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; margin: 0; }
+.opt-group legend { font-weight: 700; font-size: 0.9rem; color: var(--navy); padding: 0 4px; }
+.opt-group label { display: flex; gap: 8px; align-items: flex-start; font-size: 0.92rem; margin: 6px 0; cursor: pointer; }
+.opt-group input { margin-top: 4px; }
+textarea.coach-input { width: 100%; min-height: 200px; border: 1.5px solid var(--border); border-radius: 8px; padding: 12px; font-family: inherit; font-size: 0.95rem; resize: vertical; }
+textarea.coach-input:focus { outline: 3px solid var(--gold); border-color: var(--gold); }
+.formula-check { margin-top: 14px; border: 1.5px solid var(--navy); border-radius: 8px; padding: 12px 16px; background: #fff; overflow-x: auto; }
+.formula-check strong { color: var(--navy); }
+.formula-check table { width: 100%; border-collapse: collapse; font-size: 0.9rem; min-width: 520px; }
+.formula-check th { text-align: center; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--teal); padding: 6px; border-bottom: 2px solid var(--border); }
+.formula-check th:first-child, .formula-check td.ft-q { text-align: left; }
+.formula-check td { text-align: center; padding: 8px 6px; border-bottom: 1px solid var(--border); }
+.ft-q { font-family: Georgia, serif; color: #444; }
+.ft-missing td { background: #fdefee; }
+.ft-missing .ft-q { color: var(--red); font-family: inherit; }
+.ft { display: inline-flex; align-items: center; justify-content: center; min-width: 24px; height: 24px; border-radius: 50%; font-weight: 700; font-size: 0.8rem; }
+.ft.ok { background: #eefaf1; color: var(--green); border: 1.5px solid #bfe6ca; }
+.ft.no { background: #fdefee; color: var(--red); border: 1.5px solid #f3c8c4; }
+.ft.warn { background: var(--gold-light); color: #8a6414; border: 1.5px solid var(--gold); }
+.ft.na { border-radius: 999px; padding: 0 8px; font-size: 0.72rem; font-weight: 600; color: #6b7385; background: var(--paper-soft); border: 1px solid var(--border); }
+.check-summary { margin-top: 18px; padding: 14px 18px; border-radius: 8px; font-weight: 700; font-size: 1rem; display: flex; gap: 10px; align-items: center; }
+.check-summary.has-issues { background: #b3423a; color: #fff; }
+.check-summary.no-issues { background: var(--green); color: #fff; }
+.issue-snippet { font-family: Georgia, serif; background: rgba(255,255,255,0.7); padding: 1px 4px; border-radius: 4px; }
+
+/* Certificate */
+.certificate-panel { text-align: center; }
+.name-input { font-size: 1rem; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px; width: 100%; max-width: 340px; font-family: inherit; }
+.certificate { border: 3px double var(--gold); outline: 1px solid var(--gold); outline-offset: 6px; border-radius: 6px; padding: 40px 36px 30px; margin: 28px auto; max-width: 680px; background: #fffdf6; text-align: center; }
+.cert-eyebrow { text-transform: uppercase; letter-spacing: 0.16em; font-size: 0.72rem; color: var(--gold); font-weight: 700; margin: 0; }
+.certificate h2 { border: none; font-size: 2rem; margin: 6px 0 14px; padding: 0; }
+.cert-detail { color: #444; font-size: 0.98rem; margin: 6px 0; }
+.cert-name { font-family: Georgia, serif; font-size: 1.8rem; color: var(--navy); border-bottom: 2px solid var(--gold); display: inline-block; padding: 4px 28px; margin: 8px 0 12px; }
+.certificate ul { text-align: left; display: inline-block; margin: 12px auto 18px; padding-left: 22px; font-size: 0.95rem; }
+.certificate li { margin: 5px 0; }
+.cert-footer { display: flex; justify-content: space-between; gap: 18px; margin-top: 18px; text-align: center; flex-wrap: wrap; }
+.cert-footer > div { flex: 1 1 160px; }
+.cert-line { display: block; border-bottom: 1px solid #888; padding-bottom: 4px; font-family: Georgia, serif; font-size: 1rem; color: var(--navy); min-height: 1.6em; }
+.cert-footer small { display: block; margin-top: 4px; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: #666; }
+.cert-id { font-family: "Courier New", monospace; letter-spacing: 0.02em; font-weight: 700; font-size: 0.88rem !important; white-space: nowrap; }
+
+.site-footer { text-align: center; color: #7c8394; font-size: 0.82rem; padding: 24px; }
+
+@media (max-width: 800px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { position: static; max-height: none; }
+}
+@media (max-width: 640px) {
+  .roadmap { flex-direction: column; }
+  .roadmap-step { white-space: normal; font-size: 0.9rem; }
+  .roadmap-arrow { justify-content: center; transform: rotate(90deg); }
+  .formula-slots { grid-template-columns: 1fr 1fr; }
+  .checker-options, .right-wrong { grid-template-columns: 1fr; }
+}
+@media print {
+  .masthead, .sidebar, .site-footer, .btn-row, .no-print { display: none !important; }
+  .layout { display: block; padding: 0; }
+  .card { border: none; box-shadow: none; }
+  .card:not(.certificate-panel) { display: none !important; }
+  .certificate { margin: 0 auto; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+</style>
 </head>
 <body>
 
@@ -14,33 +242,1356 @@
   <div class="masthead-inner">
     <p class="eyebrow">Composition Workshop</p>
     <h1>MLA Evidence Integration Lab</h1>
-    <p class="subtitle">Build body paragraphs where your reason, your evidence, and your analysis work together&mdash;cited the MLA way.</p>
+    <p class="subtitle">Build body paragraphs where your reason, your evidence, and your analysis work together, cited the MLA way.</p>
   </div>
-  <div class="progress-wrap" aria-hidden="false">
-    <div class="progress-label">
-      <span>Your progress</span>
-      <span id="progress-percent">0%</span>
-    </div>
-    <div class="progress-bar-track">
-      <div class="progress-bar-fill" id="progress-bar-fill" style="width:0%"></div>
-    </div>
+  <div class="progress-wrap">
+    <div class="progress-label"><span>Your progress</span><span id="progress-percent">0%</span></div>
+    <div class="progress-bar-track"><div class="progress-bar-fill" id="progress-bar-fill" style="width:0%"></div></div>
   </div>
 </header>
 
 <div class="layout">
-  <nav class="sidebar" id="sidebar" aria-label="Lab modules">
-    <ol class="module-list" id="module-list"></ol>
-  </nav>
-
-  <main id="main" class="content" tabindex="-1">
-    <div id="module-container"></div>
-  </main>
+  <nav class="sidebar" aria-label="Lab modules"><ol class="module-list" id="module-list"></ol></nav>
+  <main id="main" class="content" tabindex="-1"><div id="module-container"></div></main>
 </div>
 
-<footer class="site-footer">
-  <p>MLA Evidence Integration Lab &middot; Professor Esch</p>
-</footer>
+<footer class="site-footer"><p>MLA Evidence Integration Lab &middot; Professor Esch</p></footer>
 
-<script src="script.js"></script>
+<script>
+/* MLA Evidence Integration Lab. Single file, no dependencies.
+   Progress is saved in the browser so students can leave and come back. */
+(function () {
+  "use strict";
+
+  var STORAGE_KEY = "mlaEvidenceLabState_v2";
+
+  var MODULES = [
+    { id: "welcome", label: "Welcome" },
+    { id: "parts", label: "1. Parts of an Argument" },
+    { id: "roadmap", label: "2. Essay Roadmap" },
+    { id: "evidence", label: "3. Integrating Evidence" },
+    { id: "builder", label: "4. Build the Sentence" },
+    { id: "matching", label: "5. Works Cited to In-Text" },
+    { id: "pagenum", label: "6. Finding the Page Number" },
+    { id: "fixit", label: "7. Fix the Citation" },
+    { id: "counterclaim", label: "8. Counterclaim & Rebuttal" },
+    { id: "certificate", label: "9. Certificate" },
+    { id: "checker", label: "Paragraph Checker", optional: true }
+  ];
+
+  /* ---------- State ---------- */
+  function defaultState() {
+    return {
+      currentModule: "welcome",
+      completed: {},
+      quizzes: {},
+      builderRound: 0,
+      order: null,
+      ccOrderDone: false,
+      checker: { text: "", type: "body", pages: "yes", thesis: "" },
+      studentName: "",
+      certId: "",
+      certDate: "",
+      certName: ""
+    };
+  }
+  var state = loadState();
+  function loadState() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return defaultState();
+      var parsed = JSON.parse(raw), merged = defaultState();
+      for (var k in parsed) if (Object.prototype.hasOwnProperty.call(parsed, k)) merged[k] = parsed[k];
+      return merged;
+    } catch (e) { return defaultState(); }
+  }
+  function saveState() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {} }
+
+  /* ---------- Navigation ---------- */
+  function moduleIndex(id) { for (var i = 0; i < MODULES.length; i++) if (MODULES[i].id === id) return i; return -1; }
+  function getModule(id) { return MODULES[moduleIndex(id)]; }
+  function isUnlocked(id) {
+    var idx = moduleIndex(id);
+    if (idx <= 0) return true;
+    if (MODULES[idx].optional) return true;
+    return !!state.completed[MODULES[idx - 1].id];
+  }
+  function markComplete(id) { state.completed[id] = true; saveState(); renderSidebar(); renderProgress(); }
+  function goTo(id) {
+    if (!isUnlocked(id)) return;
+    state.currentModule = id; saveState();
+    renderSidebar(); renderModule();
+    document.getElementById("main").focus({ preventScroll: true });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+  function renderProgress() {
+    var req = MODULES.filter(function (m) { return !m.optional; });
+    var done = req.filter(function (m) { return state.completed[m.id]; }).length;
+    var pct = Math.round(done / req.length * 100);
+    document.getElementById("progress-percent").textContent = pct + "%";
+    document.getElementById("progress-bar-fill").style.width = pct + "%";
+  }
+  function renderSidebar() {
+    var list = document.getElementById("module-list");
+    list.innerHTML = "";
+    MODULES.forEach(function (m) {
+      if (m.optional) {
+        var d = document.createElement("li"); d.className = "optional-divider"; d.textContent = "Optional tool"; list.appendChild(d);
+      }
+      var li = document.createElement("li"), btn = document.createElement("button");
+      var complete = !!state.completed[m.id];
+      btn.className = "module-nav-btn" + (m.id === state.currentModule ? " active" : "") + (complete ? " complete" : "") + (m.optional ? " optional" : "");
+      btn.disabled = !isUnlocked(m.id);
+      btn.innerHTML = '<span class="module-status">' + (complete ? "✓" : "") + '</span><span class="module-label">' + escapeHtml(m.label) + "</span>";
+      btn.addEventListener("click", function () { goTo(m.id); });
+      li.appendChild(btn); list.appendChild(li);
+    });
+  }
+  function container() { return document.getElementById("module-container"); }
+  function renderModule() {
+    var r = {
+      welcome: renderWelcome, parts: renderParts, roadmap: renderRoadmap, evidence: renderEvidence,
+      builder: renderBuilder, matching: renderMatching, pagenum: renderPageNum, fixit: renderFixIt,
+      counterclaim: renderCounterclaim, certificate: renderCertificate, checker: renderChecker
+    };
+    (r[state.currentModule] || renderWelcome)();
+  }
+
+  /* ---------- Helpers ---------- */
+  function escapeHtml(str) {
+    return String(str == null ? "" : str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+    return a;
+  }
+  function scrollNear(el) { if (el && el.scrollIntoView) el.scrollIntoView({ behavior: "smooth", block: "nearest" }); }
+  function continueBtn(id, label) { return '<div class="btn-row"><button class="btn" id="' + id + '">' + (label || "Continue") + " &rarr;</button></div>"; }
+
+  /* Builds one multiple-choice question inside `area`. Calls onCorrect(fbEl) when answered right. */
+  function buildChoices(area, q, onCorrect) {
+    var group = document.createElement("div"); group.className = "choice-group";
+    var fb = document.createElement("div"); fb.setAttribute("aria-live", "polite");
+    area.appendChild(group); area.appendChild(fb);
+    q.options.forEach(function (opt) {
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "choice-btn"; b.innerHTML = opt.text;
+      b.addEventListener("click", function () {
+        if (opt.correct) {
+          Array.prototype.forEach.call(group.children, function (c) { c.disabled = true; });
+          b.classList.add("correct");
+          fb.innerHTML = '<div class="feedback-msg good"><strong>Correct.</strong> ' + (opt.why || q.explain || "") + "</div>";
+          onCorrect(fb);
+        } else {
+          b.classList.add("incorrect"); b.disabled = true;
+          fb.innerHTML = '<div class="feedback-msg bad"><strong>Not quite.</strong> ' + (opt.why || "Try another answer.") + "</div>";
+        }
+        scrollNear(fb);
+      });
+      group.appendChild(b);
+    });
+  }
+
+  /* A module made of several multiple-choice questions, one at a time. */
+  function renderQuizModule(cfg) {
+    var qs = state.quizzes[cfg.id] || (state.quizzes[cfg.id] = { index: 0 });
+    var n = cfg.questions.length;
+    container().innerHTML = '<section class="card"><h2>' + cfg.title + "</h2>" + (cfg.intro || "") + '<div id="quiz-area"></div></section>';
+    var area = document.getElementById("quiz-area");
+
+    function showDone() {
+      area.innerHTML = '<div class="feedback-msg good" style="margin-top:20px"><strong>Section complete.</strong> You answered all ' + n + " question" + (n > 1 ? "s" : "") + '.</div><div class="btn-row"><button class="btn secondary" id="review-btn">Review the questions</button><button class="btn" id="cont-btn">Continue &rarr;</button></div>';
+      document.getElementById("review-btn").addEventListener("click", function () { showQ(0, true); });
+      document.getElementById("cont-btn").addEventListener("click", function () { goTo(cfg.nextId); });
+    }
+    function showQ(i, reviewing) {
+      var q = cfg.questions[i];
+      var dots = "";
+      for (var d = 0; d < n; d++) {
+        var cls = (state.completed[cfg.id] || d < i) ? "done" : (d === i ? "current" : "");
+        if (d === i) cls = "current";
+        dots += '<span class="' + cls + '"></span>';
+      }
+      area.innerHTML = '<div class="q-meta"><span>' + (n > 1 ? "Question " + (i + 1) + " of " + n : "Quick check") + '</span><span class="q-dots" aria-hidden="true">' + (n > 1 ? dots : "") + '</span></div><div class="q-prompt">' + q.prompt + "</div>";
+      buildChoices(area, q, function (fb) {
+        var last = i === n - 1;
+        if (!reviewing) { qs.index = last ? i : i + 1; saveState(); }
+        if (last) markComplete(cfg.id);
+        fb.insertAdjacentHTML("beforeend", continueBtn("q-next", last ? "Continue" : "Next question"));
+        document.getElementById("q-next").addEventListener("click", function () {
+          if (last) goTo(cfg.nextId);
+          else { showQ(i + 1, reviewing); scrollNear(area); }
+        });
+      });
+    }
+    if (state.completed[cfg.id]) showDone(); else showQ(Math.min(qs.index, n - 1), false);
+  }
+
+  /* ---------- Welcome ---------- */
+  function renderWelcome() {
+    container().innerHTML =
+      '<section class="card"><h2>Welcome</h2>' +
+      "<p>This lab walks you through building persuasive body paragraphs where your <strong>reason</strong>, your <strong>evidence</strong>, and your <strong>analysis</strong> work together, with every quotation cited correctly in MLA style.</p>" +
+      '<div class="callout"><strong>The formula:</strong> Reason &rarr; Evidence &rarr; Analysis. Your <strong>reason</strong> is your topic sentence: one reason your thesis is true. A paragraph that only quotes a source, without explaining it, isn’t doing its job yet.</div>' +
+      "<p>In this lab you will:</p>" +
+      "<ul><li>Identify the parts of an argument paragraph</li><li>Build quotation sentences piece by piece</li><li>Turn Works Cited entries into correct in-text citations</li><li>Find the right page number to cite</li><li>Fix common citation mistakes</li><li>Organize your third body paragraph: the counterclaim and rebuttal</li></ul>" +
+      "<p>When you finish, you’ll earn a certificate. After that, an optional <strong>Paragraph Checker</strong> is available if you’d like feedback on your own writing.</p>" +
+      continueBtn("next-btn", "Begin") + "</section>";
+    document.getElementById("next-btn").addEventListener("click", function () { markComplete("welcome"); goTo("parts"); });
+  }
+
+  /* ---------- 1. Parts ---------- */
+  var EXAMPLE_PARA = "Assigned seating in college classrooms helps students perform better because it reduces distractions. Chen states that “students seated away from friends showed a twelve percent increase in quiz scores over one semester” (118). This increase suggests that seating placement, not effort alone, plays a measurable role in how well students focus during a lecture. Assigned seating should therefore be standard practice in large lecture courses.";
+  function renderParts() {
+    renderQuizModule({
+      id: "parts", nextId: "roadmap", title: "1. Parts of an Argument",
+      intro:
+        "<p>Every body paragraph is built from four moving parts:</p><ul>" +
+        "<li><strong>Thesis statement:</strong> your paper’s main claim, usually the last sentence of your introduction.</li>" +
+        "<li><strong>Topic sentence (your reason):</strong> the first sentence of a body paragraph. It states <em>one reason</em> your thesis is true, and the rest of the paragraph proves that reason.</li>" +
+        "<li><strong>Evidence:</strong> a quotation or paraphrase from an outside source that supports the reason.</li>" +
+        "<li><strong>Analysis:</strong> your own explanation of what the evidence means and why it matters. This is the part students skip most often.</li></ul>" +
+        '<div class="callout gold"><strong>Thesis vs. topic sentence:</strong> your thesis makes the big claim; each topic sentence gives one reason that backs it up.<ul>' +
+        "<li><em>Thesis:</em> Colleges should require assigned seating in large lecture courses.</li>" +
+        "<li><em>Topic sentence (Reason 1):</em> Assigned seating helps students perform better because it reduces distractions.</li>" +
+        "<li><em>Topic sentence (Reason 2):</em> Assigned seating helps instructors learn names and spot struggling students sooner.</li></ul>" +
+        "Test: put “because” between your thesis and your topic sentence. If it makes sense, your topic sentence is a reason.</div>" +
+        '<div class="example-box"><span class="label">Example paragraph</span>' + EXAMPLE_PARA + "</div>",
+      questions: [
+        {
+          prompt: '<div class="example-box"><span class="label">Thesis</span>Community colleges should offer free tuition to local high school graduates.</div>Which sentence would work as a <strong>topic sentence</strong> for a body paragraph? (Remember: it should be a reason that backs up the thesis.)',
+          options: [
+            { text: "Community colleges were first created in the early 1900s.", why: "That’s a background fact, not a reason. It doesn’t explain why tuition should be free." },
+            { text: "Free tuition would help more students finish a degree without taking on debt.", correct: true, why: "It gives a reason the thesis is true. The “because” test works: colleges should offer free tuition <em>because</em> it would help more students finish without debt." },
+            { text: "Nguyen argues that “community colleges are the front door to higher education.”", why: "That’s evidence. A topic sentence is your own claim, in your own words, before any quotation." },
+            { text: "Some people think free tuition costs taxpayers too much.", why: "That’s the opposing view. It belongs in Body Paragraph 3, your counterclaim and rebuttal, not in a reason paragraph." }
+          ]
+        },
+        {
+          prompt: "Now look at the example paragraph. Which sentence is the <strong>topic sentence</strong> (the reason)?",
+          options: [
+            { text: "Chen states that “students seated away from friends showed a twelve percent increase in quiz scores over one semester” (118).", why: "That sentence is the evidence. It brings in a quotation from a source." },
+            { text: "Assigned seating in college classrooms helps students perform better because it reduces distractions.", correct: true, why: "It opens the paragraph and states the one reason this paragraph will prove." },
+            { text: "Assigned seating should therefore be standard practice in large lecture courses.", why: "That is the closing sentence. It ties the paragraph back to the bigger claim." }
+          ]
+        },
+        {
+          prompt: "Which sentence in the example is the <strong>analysis</strong>?",
+          options: [
+            { text: "Assigned seating in college classrooms helps students perform better because it reduces distractions.", why: "That is the topic sentence. Look for the sentence that explains what the quotation proves." },
+            { text: "Chen states that “students seated away from friends showed a twelve percent increase in quiz scores over one semester” (118).", why: "That is the evidence itself. Analysis comes after it and explains it." },
+            { text: "This increase suggests that seating placement, not effort alone, plays a measurable role in how well students focus during a lecture.", correct: true, why: "It doesn’t repeat the quote or add new evidence. It explains what the quote proves, and that’s analysis." },
+            { text: "Assigned seating should therefore be standard practice in large lecture courses.", why: "That sentence extends the argument. Analysis explains the meaning of the evidence." }
+          ]
+        }
+      ]
+    });
+  }
+
+  /* ---------- 2. Roadmap ---------- */
+  function renderRoadmap() {
+    container().innerHTML =
+      '<section class="card"><h2>2. Essay Roadmap</h2>' +
+      "<p>Here’s where your paragraphs fit in the whole essay:</p>" +
+      '<div class="roadmap">' +
+      '<div class="roadmap-step">Introduction<small>+ Thesis</small></div><div class="roadmap-arrow">&rarr;</div>' +
+      '<div class="roadmap-step">Body Paragraph 1<small>Reason 1</small></div><div class="roadmap-arrow">&rarr;</div>' +
+      '<div class="roadmap-step">Body Paragraph 2<small>Reason 2</small></div><div class="roadmap-arrow">&rarr;</div>' +
+      '<div class="roadmap-step counterclaim">Body Paragraph 3<small>Counterclaim &amp; Rebuttal</small></div><div class="roadmap-arrow">&rarr;</div>' +
+      '<div class="roadmap-step">Conclusion<small>Wrap-up</small></div>' +
+      "</div>" +
+      '<div class="callout gold"><strong>Note:</strong> Body Paragraph 3 is your counterclaim and rebuttal paragraph. It comes last, after you’ve made your own case. You want your reasons on the record before you address the other side.</div>' +
+      '<div class="callout"><strong>Remember:</strong> each body paragraph’s topic sentence <em>is</em> its reason. Body Paragraph 1 opens with Reason 1, and Body Paragraph 2 opens with Reason 2. Body Paragraph 3 is different: it opens with the opposing view, then answers it.</div>' +
+      continueBtn("next-btn", "I understand the roadmap") + "</section>";
+    document.getElementById("next-btn").addEventListener("click", function () { markComplete("roadmap"); goTo("evidence"); });
+  }
+
+  /* ---------- 3. Evidence ---------- */
+  var EV_PARTS = [
+    {
+      title: "Signal phrase",
+      html:
+        "<p>The <strong>signal phrase</strong> is the part of your sentence that introduces the quotation. It is usually the author’s name plus a verb.</p>" +
+        '<div class="example-box"><span class="label">Signal phrase = author + reporting verb</span><span class="sp-underline"><span class="hl">Rivera</span> <span class="hl">argues</span>,</span> “structured peer review strengthens revision decisions” (42).</div>' +
+        "<h4>First: the author’s name</h4>" +
+        '<div class="callout"><ul style="margin-top:0">' +
+        "<li>The <strong>first time</strong> you mention an author, use their full name: <em>Marisol Rivera argues…</em></li>" +
+        "<li><strong>After that</strong>, use their last name only: <em>Rivera also notes…</em></li>" +
+        "<li><strong>Never</strong> use the author’s first name alone. It sounds like you know them personally.</li></ul>" +
+        '<div class="right-wrong" style="margin-bottom:0"><div class="rw-right"><span class="tag">Correct</span>Roald Dahl writes… / Dahl writes…</div><div class="rw-wrong"><span class="tag">Incorrect</span>Roald writes…</div></div></div>' +
+        "<h4>Second: the reporting verb</h4>" +
+        "<p>A <strong>reporting verb</strong> is a verb that tells what the author is doing with their words. Choose one that shows how the source relates to your point: <em>argues</em>, <em>explains</em>, <em>notes</em>, <em>claims</em>, <em>suggests</em>, <em>warns</em>.</p>" +
+        '<div class="callout"><strong>Always use present tense.</strong> With one author, the verb ends in <strong>-s</strong>: Rivera argue<span class="hl">s</span>, Dahl write<span class="hl">s</span>, Chen explain<span class="hl">s</span>. Even if the source was written years ago, its words still “speak” on the page, so MLA treats them as happening now.' +
+        '<div class="right-wrong" style="margin-bottom:0"><div class="rw-right"><span class="tag">Correct</span>Rivera argue<span class="hl">s</span>,</div><div class="rw-wrong"><span class="tag">Incorrect</span>Rivera argued, / Rivera was arguing,</div></div>' +
+        '<p style="margin:10px 0 0;font-size:0.92rem">Exception: with two or more authors, drop the -s, just as you would with any plural subject: Patel and Lee <em>report</em>.</p></div>',
+      questions: [
+        {
+          prompt: '<p>This is the <strong>first time</strong> you mention the author of “Lamb to the Slaughter.” Which signal phrase is correct?</p>',
+          options: [
+            { text: "Roald writes that", why: "Never use the author’s first name alone." },
+            { text: "Roald Dahl writes that", correct: true, why: "Full name for the first mention, and a present-tense verb ending in -s." },
+            { text: "Dahl wrote that", why: "Two problems: the first mention should use the full name, and the verb should be present tense (writes)." }
+          ]
+        },
+        {
+          prompt: '<p>Which verb best fits this signal phrase?</p><div class="example-box">Rivera ______, “structured peer review strengthens revision decisions” (42).</div>',
+          options: [
+            { text: "said", why: "Past tense, and vague. Use a precise, present-tense verb." },
+            { text: "was saying", why: "Wrong tense. Stick to simple present tense (argues, explains, notes)." },
+            { text: "argues", correct: true, why: "Present tense with an -s, and precise about how Rivera is using the claim." }
+          ]
+        }
+      ]
+    },
+    {
+      title: "Quotation",
+      html:
+        "<p>Copy the source’s words <strong>exactly</strong> and put them inside quotation marks. Don’t change, add, or leave out words inside the quotation marks.</p>" +
+        '<div class="example-box"><span class="label">What Rivera actually wrote (page 42)</span>Structured peer review strengthens revision decisions in first-year writing courses.</div>',
+      questions: [
+        {
+          prompt: "<p>Which sentence quotes Rivera correctly?</p>",
+          options: [
+            { text: "Rivera argues, “peer review makes revisions stronger” (42).", why: "Those aren’t Rivera’s words. If you change the wording, it’s no longer a quotation." },
+            { text: "Rivera argues, “structured peer review really strengthens revision decisions” (42).", why: "“Really” isn’t in the original. Never add words inside quotation marks." },
+            { text: "Rivera argues, “structured peer review strengthens revision decisions” (42).", correct: true, why: "Every word inside the quotation marks matches the original exactly." }
+          ]
+        }
+      ]
+    },
+    {
+      title: "In-text citation",
+      html:
+        "<p>Look back at the formula example: <span class='hl'>Rivera</span>’s name already appears in the signal phrase, so only the page number goes in parentheses: <span class='hl'>(42)</span>. If you leave the author’s name out of your sentence, both the author and the page go inside the parentheses:</p>" +
+        '<div class="example-box"><span class="label">No author name in the sentence</span>Structured peer review “strengthens revision decisions” <span class="hl">(Rivera 42)</span>.</div>' +
+        '<div class="callout never"><strong>MLA in-text citations never include:</strong><ul>' +
+        "<li>“p.” or “pg.” before the page number</li>" +
+        "<li>a comma between the author’s name and the page number</li></ul></div>" +
+        '<div class="right-wrong"><div class="rw-right"><span class="tag">Correct</span>(Rivera 42)</div><div class="rw-wrong"><span class="tag">Incorrect</span>(Rivera, p. 42)</div></div>',
+      questions: [
+        {
+          prompt: "<p>Which in-text citation is formatted correctly in MLA?</p>",
+          options: [
+            { text: "(Rivera, 42)", why: "MLA in-text citations never include a comma between the author and the page number." },
+            { text: "(Rivera p. 42)", why: "MLA in-text citations never include “p.” before the page number." },
+            { text: "(Rivera 42)", correct: true, why: "Author’s last name, a space, and the page number. Nothing else." },
+            { text: "(Rivera, 2021, p. 42)", why: "MLA in-text citations never include the year, a comma, or “p.”" }
+          ]
+        },
+        {
+          prompt: '<p>You already named the author in your signal phrase:</p><div class="example-box">Rivera explains that peer review “builds confidence” ____.</div><p>What goes in the blank?</p>',
+          options: [
+            { text: "(Rivera 44)", why: "Rivera is already named in the sentence, so repeating the name is unnecessary." },
+            { text: "(44)", correct: true, why: "The author is named in the signal phrase, so only the page number is needed." },
+            { text: "Nothing. Naming the author is enough.", why: "If the source has page numbers, you still need the page number in parentheses." }
+          ]
+        }
+      ]
+    },
+    {
+      title: "End-of-sentence period",
+      html:
+        '<div class="callout gold"><strong>The period always goes <em>after</em> the in-text citation</strong>, never inside the quotation marks. The citation is part of your sentence, so the sentence doesn’t end until the citation is done.</div>' +
+        '<div class="right-wrong"><div class="rw-right"><span class="tag">Correct</span>…revision decisions” (42)<span class="hl hl-dot">.</span></div><div class="rw-wrong"><span class="tag">Incorrect</span>…revision decisions<span class="hl hl-dot">.</span>” (42)</div></div>',
+      questions: [
+        {
+          prompt: "<p>Which sentence puts the end-of-sentence period in the right place?</p>",
+          options: [
+            { text: "Dahl writes that Mary pours “a strongish one for him, a weak one for herself.” (212)", why: "The period is inside the quotation marks, so the sentence ends before the citation." },
+            { text: "Dahl writes that Mary pours “a strongish one for him, a weak one for herself” (212).", correct: true, why: "The period comes after the in-text citation, so the citation is part of the sentence." },
+            { text: "Dahl writes that Mary pours “a strongish one for him, a weak one for herself.” (212).", why: "Now there are two periods. Remove the one inside the quotation marks." }
+          ]
+        }
+      ]
+    }
+  ];
+
+  function renderEvidence() {
+    var st = state.quizzes.evidence;
+    if (!st || st.part === undefined) st = state.quizzes.evidence = { part: 0, q: 0 };
+    container().innerHTML =
+      '<section class="card" id="ev-card"><h2>3. Integrating Evidence (MLA)</h2>' +
+      "<p>Embedding a quote is simpler than you might expect once you know the formula:</p>" +
+      '<div class="example-box"><span class="label">Signal phrase + quotation + in-text citation + period</span><span class="fx" data-fx="0">Rivera argues,</span> <span class="fx" data-fx="1">“structured peer review strengthens revision decisions”</span> <span class="fx" data-fx="2">(42)</span><span class="fx fx-dot" data-fx="3">.</span></div>' +
+      '<div class="formula-steps" id="ev-steps"></div>' +
+      '<div id="ev-area"></div></section>';
+    var area = document.getElementById("ev-area");
+
+    function steps(cur, allDone) {
+      document.querySelectorAll("#ev-card .fx").forEach(function (el) { el.classList.toggle("on", !allDone && +el.dataset.fx === cur); });
+      document.getElementById("ev-steps").innerHTML = EV_PARTS.map(function (p, i) {
+        var cls = allDone || i < cur ? "done" : i === cur ? "current" : "";
+        return '<span class="fs-step ' + cls + '"><b>' + (allDone || i < cur ? "✓" : i + 1) + "</b>" + p.title + "</span>" + (i < EV_PARTS.length - 1 ? '<span class="fs-plus">+</span>' : "");
+      }).join("");
+    }
+    function showDone() {
+      steps(0, true);
+      area.innerHTML = '<div class="feedback-msg good"><strong>Section complete.</strong> You worked through all four parts of the formula.</div><div class="btn-row"><button class="btn secondary" id="review-btn">Review the four parts</button><button class="btn" id="cont-btn">Continue &rarr;</button></div>';
+      document.getElementById("review-btn").addEventListener("click", function () { showPart(0, 0, true); });
+      document.getElementById("cont-btn").addEventListener("click", function () { goTo("builder"); });
+    }
+    function showPart(p, qi, reviewing) {
+      var part = EV_PARTS[p];
+      steps(p, false);
+      area.innerHTML = "<h3>Part " + (p + 1) + " of " + EV_PARTS.length + ": " + part.title + "</h3>" + part.html + '<div id="ev-q"></div>';
+      showQ(p, qi, reviewing);
+    }
+    function showQ(p, qi, reviewing) {
+      var part = EV_PARTS[p], q = part.questions[qi], n = part.questions.length;
+      var qa = document.getElementById("ev-q");
+      qa.innerHTML = '<div class="q-meta"><span>Quick check' + (n > 1 ? " " + (qi + 1) + " of " + n : "") + '</span></div><div class="q-prompt">' + q.prompt + "</div>";
+      buildChoices(qa, q, function (fb) {
+        var lastQ = qi === n - 1, lastPart = p === EV_PARTS.length - 1;
+        var label;
+        if (!lastQ) { label = "Next question"; if (!reviewing) { st.part = p; st.q = qi + 1; } }
+        else if (!lastPart) { label = "Next part: " + EV_PARTS[p + 1].title; if (!reviewing) { st.part = p + 1; st.q = 0; } }
+        else { label = "Continue"; markComplete("evidence"); }
+        saveState();
+        fb.insertAdjacentHTML("beforeend", continueBtn("q-next", label));
+        document.getElementById("q-next").addEventListener("click", function () {
+          if (!lastQ) { showQ(p, qi + 1, reviewing); scrollNear(document.getElementById("ev-q")); }
+          else if (!lastPart) { showPart(p + 1, 0, reviewing); document.getElementById("ev-card").scrollIntoView({ behavior: "smooth", block: "start" }); }
+          else goTo("builder");
+        });
+      });
+    }
+    if (state.completed.evidence) showDone();
+    else showPart(Math.min(st.part, EV_PARTS.length - 1), st.q || 0, false);
+  }
+
+  /* ---------- 4. Sentence builder (drag and drop) ---------- */
+  var SLOTS = [
+    { key: "signal", label: "Signal phrase" },
+    { key: "quote", label: "“Quotation”" },
+    { key: "cite", label: "(In-text citation)" },
+    { key: "end", label: "Period" }
+  ];
+  var ROUNDS = [
+    {
+      context: "<strong>Source:</strong> Marisol Rivera’s book. The quotation is on page 42. <strong>Name Rivera in your signal phrase.</strong>",
+      chips: [
+        { t: "Rivera argues,", slot: "signal" },
+        { t: "“structured peer review strengthens revision decisions”", slot: "quote" },
+        { t: "(42)", slot: "cite" },
+        { t: ".", slot: "end" },
+        { t: "(Rivera, p. 42)", why: "(Rivera, p. 42) uses “p.” and a comma, and Rivera is already named. Only the page number is needed: (42)." },
+        { t: "“structured peer review strengthens revision decisions.”", why: "The period goes after the citation, not inside the quotation marks." }
+      ]
+    },
+    {
+      context: "<strong>Source:</strong> an article by Wei Chen. The quotation is on page 118. <strong>Do not name Chen in your signal phrase.</strong>",
+      chips: [
+        { t: "One study found that", slot: "signal" },
+        { t: "“students seated away from friends showed higher quiz scores”", slot: "quote" },
+        { t: "(Chen 118)", slot: "cite" },
+        { t: ".", slot: "end" },
+        { t: "(118)", why: "Chen isn’t named in this sentence, so the reader needs the author’s name in the parentheses: (Chen 118)." },
+        { t: "(Chen, 118)", why: "MLA in-text citations never include a comma between the author and the page." }
+      ]
+    },
+    {
+      context: "<strong>Source:</strong> an article by Anika Patel and Jordan Lee. The quotation is on page 61. <strong>Do not name the authors in your signal phrase.</strong>",
+      chips: [
+        { t: "Researchers report that", slot: "signal" },
+        { t: "“students who slept fewer than six hours scored lower on exams”", slot: "quote" },
+        { t: "(Patel and Lee 61)", slot: "cite" },
+        { t: ".", slot: "end" },
+        { t: "(Patel & Lee 61)", why: "MLA spells out “and” between two authors’ names." },
+        { t: "(Patel et al. 61)", why: "“et al.” is only for three or more authors. With two authors, name both." }
+      ]
+    },
+    {
+      context: "<strong>Source:</strong> Roald Dahl’s short story “Lamb to the Slaughter.” The quotation is on page 212. <strong>Name Dahl in your signal phrase.</strong>",
+      chips: [
+        { t: "Dahl writes that Mary pours", slot: "signal" },
+        { t: "“a strongish one for him, a weak one for herself”", slot: "quote" },
+        { t: "(212)", slot: "cite" },
+        { t: ".", slot: "end" },
+        { t: "(Dahl 212)", why: "Dahl is already named in the sentence, so only the page number is needed." },
+        { t: "“Then she walked over and made the drinks” (Dahl 3)", why: "That piece crams a different quotation and citation into one block. Build the sentence from separate parts." }
+      ]
+    }
+  ];
+
+  function renderBuilder() {
+    var complete = !!state.completed.builder;
+    container().innerHTML =
+      '<section class="card"><h2>4. Build the Sentence</h2>' +
+      "<p>Every quotation sentence follows the same formula. Drag each piece into the correct box. (You can also tap a piece, then tap a box.) Two pieces in each set are traps, so leave those in the bank.</p>" +
+      '<div class="example-box"><span class="label">The formula</span>Signal phrase + “Quotation” + (In-text citation) + period</div>' +
+      '<div id="builder-area"></div></section>';
+    var area = document.getElementById("builder-area");
+    if (complete && state.builderRound >= ROUNDS.length) {
+      area.innerHTML = '<div class="feedback-msg good"><strong>Section complete.</strong> You built all ' + ROUNDS.length + ' sentences.</div><div class="btn-row"><button class="btn secondary" id="redo">Practice again</button><button class="btn" id="cont">Continue &rarr;</button></div>';
+      document.getElementById("redo").addEventListener("click", function () { showRound(0, true); });
+      document.getElementById("cont").addEventListener("click", function () { goTo("matching"); });
+      return;
+    }
+    showRound(Math.min(state.builderRound, ROUNDS.length - 1), false);
+
+    function showRound(r, practice) {
+      var R = ROUNDS[r];
+      var dots = "";
+      for (var d = 0; d < ROUNDS.length; d++) dots += '<span class="' + (d < r ? "done" : d === r ? "current" : "") + '"></span>';
+      area.innerHTML =
+        '<div class="q-meta"><span>Sentence ' + (r + 1) + " of " + ROUNDS.length + '</span><span class="q-dots">' + dots + "</span></div>" +
+        '<div class="callout gold">' + R.context + "</div>" +
+        '<div class="formula-slots">' + SLOTS.map(function (s) {
+          return '<div class="slot" tabindex="0" role="button" aria-label="' + escapeHtml(s.label) + ' box" data-slot="' + s.key + '"><span class="slot-label">' + s.label + '</span><div class="slot-drop"></div></div>';
+        }).join("") + "</div>" +
+        '<span class="chip-bank-label">Pieces</span><div class="chip-bank" id="chip-bank"></div>' +
+        '<div class="btn-row"><button class="btn" id="check-build">Check My Sentence</button><button class="btn secondary" id="reset-build">Start Over</button></div>' +
+        '<div id="build-fb" aria-live="polite"></div>';
+
+      var bank = document.getElementById("chip-bank");
+      var fb = document.getElementById("build-fb");
+      var selected = null;
+
+      shuffle(R.chips.map(function (c, i) { return i; })).forEach(function (i) {
+        var chip = document.createElement("button");
+        chip.type = "button"; chip.className = "chip"; chip.dataset.idx = i; chip.textContent = R.chips[i].t;
+        attachChip(chip);
+        bank.appendChild(chip);
+      });
+
+      function clearMarks() {
+        fb.innerHTML = "";
+        area.querySelectorAll(".slot").forEach(function (s) { s.classList.remove("correct", "incorrect"); });
+      }
+      function select(chip) {
+        if (selected) selected.classList.remove("selected");
+        selected = (selected === chip) ? null : chip;
+        if (selected) selected.classList.add("selected");
+        area.querySelectorAll(".slot").forEach(function (s) { s.classList.toggle("armed", !!selected); });
+      }
+      function placeInSlot(chip, slotEl) {
+        var drop = slotEl.querySelector(".slot-drop");
+        var existing = drop.querySelector(".chip");
+        if (existing && existing !== chip) bank.appendChild(existing);
+        drop.appendChild(chip);
+        if (selected) select(selected);
+        clearMarks();
+      }
+      function toBank(chip) { bank.appendChild(chip); if (selected) select(selected); clearMarks(); }
+      function tap(chip) {
+        if (chip.parentNode !== bank) toBank(chip); else select(chip);
+      }
+
+      area.querySelectorAll(".slot").forEach(function (slotEl) {
+        slotEl.addEventListener("click", function (e) {
+          if (e.target.closest(".chip")) return;
+          if (selected) placeInSlot(selected, slotEl);
+        });
+        slotEl.addEventListener("keydown", function (e) {
+          if ((e.key === "Enter" || e.key === " ") && selected) { e.preventDefault(); placeInSlot(selected, slotEl); }
+        });
+      });
+
+      function attachChip(chip) {
+        var startX, startY, offX, offY, dragging = false, ghost = null, pid = null, hoverEl = null;
+        chip.addEventListener("click", function (e) { if (e.detail === 0) tap(chip); }); /* keyboard */
+        chip.addEventListener("pointerdown", function (e) {
+          if (e.button !== 0) return;
+          e.preventDefault();
+          pid = e.pointerId; startX = e.clientX; startY = e.clientY; dragging = false;
+          var rect = chip.getBoundingClientRect(); offX = e.clientX - rect.left; offY = e.clientY - rect.top;
+          document.addEventListener("pointermove", onMove);
+          document.addEventListener("pointerup", onUp);
+          document.addEventListener("pointercancel", onUp);
+        });
+        function setHover(el) {
+          if (hoverEl === el) return;
+          if (hoverEl) hoverEl.classList.remove("hover");
+          hoverEl = el; if (hoverEl) hoverEl.classList.add("hover");
+        }
+        function targetAt(x, y) {
+          var el = document.elementFromPoint(x, y);
+          if (!el) return null;
+          return el.closest(".slot") || el.closest(".chip-bank");
+        }
+        function onMove(e) {
+          if (e.pointerId !== pid) return;
+          if (!dragging && Math.abs(e.clientX - startX) + Math.abs(e.clientY - startY) > 6) {
+            dragging = true;
+            ghost = chip.cloneNode(true); ghost.classList.add("ghost"); ghost.classList.remove("selected");
+            ghost.style.width = chip.getBoundingClientRect().width + "px";
+            document.body.appendChild(ghost);
+            chip.classList.add("drag-source");
+          }
+          if (dragging) {
+            ghost.style.left = (e.clientX - offX) + "px"; ghost.style.top = (e.clientY - offY) + "px";
+            setHover(targetAt(e.clientX, e.clientY));
+          }
+        }
+        function onUp(e) {
+          if (e.pointerId !== pid) return;
+          document.removeEventListener("pointermove", onMove);
+          document.removeEventListener("pointerup", onUp);
+          document.removeEventListener("pointercancel", onUp);
+          if (dragging) {
+            var t = targetAt(e.clientX, e.clientY);
+            ghost.remove(); ghost = null; chip.classList.remove("drag-source"); setHover(null);
+            if (t && t.classList.contains("slot")) placeInSlot(chip, t);
+            else if (t && t.classList.contains("chip-bank")) toBank(chip);
+          } else if (e.type === "pointerup") {
+            tap(chip);
+          }
+          dragging = false;
+        }
+      }
+
+      document.getElementById("reset-build").addEventListener("click", function () { showRound(r, practice); });
+      document.getElementById("check-build").addEventListener("click", function () {
+        var slots = area.querySelectorAll(".slot"), missing = 0, wrong = [], pieces = [];
+        slots.forEach(function (s) {
+          var c = s.querySelector(".chip");
+          s.classList.remove("correct", "incorrect");
+          if (!c) { missing++; return; }
+          var data = R.chips[+c.dataset.idx];
+          pieces.push(data.t);
+          if (data.slot === s.dataset.slot) s.classList.add("correct");
+          else {
+            s.classList.add("incorrect");
+            var label = SLOTS.filter(function (x) { return x.key === s.dataset.slot; })[0].label;
+            wrong.push(data.why || ("“" + escapeHtml(data.t) + "” doesn’t belong in the " + label + " box."));
+          }
+        });
+        if (missing) {
+          fb.innerHTML = '<div class="feedback-msg bad">Fill all four boxes first. ' + missing + " still empty.</div>";
+        } else if (wrong.length) {
+          fb.innerHTML = '<div class="feedback-msg bad"><strong>Almost.</strong> The boxes outlined in red need a different piece:<ul>' + wrong.map(function (w) { return "<li>" + w + "</li>"; }).join("") + "</ul></div>";
+        } else {
+          var sentence = pieces[0] + " " + pieces[1] + " " + pieces[2] + pieces[3];
+          var last = r === ROUNDS.length - 1;
+          fb.innerHTML = '<div class="feedback-msg good"><strong>That’s the formula.</strong><div class="built-sentence">' + escapeHtml(sentence) + "</div></div>" + continueBtn("build-next", last ? "Continue" : "Next sentence");
+          if (!practice) { state.builderRound = r + 1; saveState(); }
+          if (last) markComplete("builder");
+          document.getElementById("build-next").addEventListener("click", function () {
+            if (last) goTo("matching"); else { showRound(r + 1, practice); scrollNear(area); }
+          });
+        }
+        scrollNear(fb);
+      });
+    }
+  }
+
+  /* ---------- 5. Works Cited to in-text ---------- */
+  function wc(entry, note) {
+    return '<span class="wc-label">Works Cited entry</span><div class="wc-entry">' + entry + "</div>" + (note ? "<p>" + note + "</p>" : "");
+  }
+  function renderMatching() {
+    renderQuizModule({
+      id: "matching", nextId: "pagenum", title: "5. From Works Cited to In-Text Citation",
+      intro:
+        "<p>Your in-text citation is a pointer. It tells your reader exactly which entry to look for on your Works Cited page. That means the name in your parentheses must be <strong>the first word or words of the Works Cited entry</strong>.</p>" +
+        '<div class="callout"><strong>In-Text Citation Quick Guide:</strong><ul>' +
+        "<li>One author: (Rivera 42)</li><li>Two authors: (Patel and Lee 61)</li><li>Three or more authors: (Okafor et al. 22)</li>" +
+        "<li>No author: (“Rising Tuition”) <span class='hint'>Use a shortened version of the title instead of a name.</span></li>" +
+        "<li>No page numbers (most websites): (Nguyen) <span class='hint'>Use the author’s last name and leave out the page number.</span></li></ul></div>" +
+        "<p>Read each Works Cited entry, then choose the in-text citation that matches it.</p>",
+      questions: [
+        {
+          prompt: wc("Rivera, Marisol. <em>Peer Review in the Writing Classroom</em>. Harbor Press, 2021.", "Your quotation comes from page 42, and you did <strong>not</strong> name the author in your sentence."),
+          options: [
+            { text: "(Marisol 42)", why: "Use the author’s last name, the first word of the entry." },
+            { text: "(Rivera 42)", correct: true, why: "Last name plus page, with no comma." },
+            { text: "(Rivera, 2021, p. 42)", why: "MLA doesn’t include the year, commas, or “p.”" }
+          ]
+        },
+        {
+          prompt: wc("Patel, Anika, and Jordan Lee. “Screen Time and Sleep in College Students.” <em>Journal of Campus Health</em>, vol. 12, no. 3, 2022, pp. 55–70.", "Your quotation comes from page 61."),
+          options: [
+            { text: "(Patel 61)", why: "This source has two authors. Name both." },
+            { text: "(Patel & Lee 61)", why: "Close, but MLA spells out “and.”" },
+            { text: "(Patel and Lee 61)", correct: true, why: "Two authors: both last names joined by “and,” then the page." },
+            { text: "(Patel and Lee 55–70)", why: "55–70 is the full page range of the article. Cite only the page your quotation is on." }
+          ]
+        },
+        {
+          prompt: wc("Okafor, Daniel, et al. “Urban Gardens and Food Access.” <em>Community Studies Quarterly</em>, vol. 8, no. 1, 2020, pp. 14–29.", "Your quotation comes from page 22."),
+          options: [
+            { text: "(Okafor et al. 22)", correct: true, why: "The entry starts with “Okafor, Daniel, et al.,” so the citation uses “Okafor et al.” plus the page." },
+            { text: "(Okafor 22)", why: "Leaving off “et al.” makes it look like Okafor wrote this alone." },
+            { text: "(Daniel et al. 22)", why: "Use the last name, which is the first word of the entry." },
+            { text: "(Okafor et al., 22)", why: "No comma before the page number." }
+          ]
+        },
+        {
+          prompt: wc("Nguyen, Tara. “Why Community Colleges Matter.” <em>The Daily Ledger</em>, 4 Mar. 2024, www.dailyledger.com/opinion/community-colleges.", "This is a web article with <strong>no page numbers</strong>."),
+          options: [
+            { text: "(Nguyen 1)", why: "Don’t invent a page number. Web pages don’t have one." },
+            { text: "(Nguyen)", correct: true, why: "When there’s no page number, the author’s name alone is the whole citation." },
+            { text: "(Nguyen, n.d.)", why: "MLA doesn’t use “n.d.” or dates in the in-text citation." },
+            { text: "(Tara Nguyen)", why: "Use the last name only." }
+          ]
+        },
+        {
+          prompt: wc("“Rising Tuition and Student Debt.” <em>National Education Review</em>, 12 Jan. 2023, www.nationaledreview.org/rising-tuition.", "There is <strong>no author</strong> and no page numbers."),
+          options: [
+            { text: "(National Education Review)", why: "The entry begins with the article title, not the website name. Your citation must match the first words of the entry." },
+            { text: "(Anonymous)", why: "MLA doesn’t use “Anonymous” unless the source is actually signed that way." },
+            { text: "(“Rising Tuition”)", correct: true, why: "No author, so use a shortened version of the title in quotation marks, matching the first words of the entry." },
+            { text: "(“Rising Tuition and Student Debt,” 2023)", why: "Shorten the title and leave out the year and comma." }
+          ]
+        },
+        {
+          prompt: wc("Texas Higher Education Coalition. <em>Pathways to Completion: Student Success in Two-Year Colleges</em>. Lone Star UP, 2022.", "This report was written by an organization. Your quotation comes from page 18."),
+          options: [
+            { text: "(Texas Higher Education Coalition 18)", correct: true, why: "When an organization is the author, its name works exactly like a person’s name." },
+            { text: "(Coalition 18)", why: "Use the organization’s full name so it matches the Works Cited entry." },
+            { text: "(Texas Higher Education Coalition, 2022)", why: "No year and no comma in MLA, and this source has a page number." }
+          ]
+        },
+        {
+          prompt: wc("Dahl, Roald. “Lamb to the Slaughter.” <em>Short Fiction for Composition</em>, edited by Lena Ortiz, Westfield Press, 2019, pp. 210–17.", "Your quotation comes from page 212. You did <strong>not</strong> name Dahl in your sentence."),
+          options: [
+            { text: "(Ortiz 212)", why: "Ortiz edited the anthology but didn’t write the story. Cite the author, whose name starts the entry." },
+            { text: "(“Lamb to the Slaughter” 212)", why: "Use the title only when there’s no author. This story has one." },
+            { text: "(Dahl 212)", correct: true, why: "The story’s author, then the page where the quotation appears." }
+          ]
+        },
+        {
+          prompt: '<p>Here is a student’s sentence and the source it came from:</p><div class="example-box">Orwell insists that liberty means “the right to tell people what they do not want to hear” ____.</div>' + wc("Orwell, George. “The Freedom of the Press.” <em>Animal Farm</em>, Signet Classics, 1996, pp. 101–12.", "The quotation is on page 112. What goes in the blank?"),
+          options: [
+            { text: "(Orwell 112)", why: "Orwell is already named in the sentence, so you only need the page." },
+            { text: "(112)", correct: true, why: "Author in the signal phrase, page in the parentheses." },
+            { text: "(Orwell)", why: "This source has page numbers, so the page must be included." }
+          ]
+        }
+      ]
+    });
+  }
+
+  /* ---------- 6. Page numbers ---------- */
+  function renderPageNum() {
+    renderQuizModule({
+      id: "pagenum", nextId: "fixit", title: "6. Finding the Right Page Number",
+      intro:
+        "<p>An in-text citation is only useful if the page number is accurate. Never guess.</p>" +
+        '<div class="callout"><strong>Rules:</strong><ul>' +
+        "<li>Cite the page number printed on the page itself, not the PDF viewer’s page count.</li>" +
+        "<li>Cite only the page your quotation is on, not the whole page range from your Works Cited entry.</li>" +
+        "<li>If the source has no page numbers (most websites), leave the page out. Don’t make one up.</li></ul></div>",
+      questions: [
+        {
+          prompt: "You open a PDF of a book chapter. Your PDF viewer says you’re looking at “page 9 of 14.” At the bottom corner of that page, printed as part of the scanned book page, you see the number <strong>112</strong>. Your quotation comes from this page. What page number do you cite?",
+          options: [
+            { text: "Page 9 (the PDF viewer’s page count)", why: "The viewer’s count almost never matches the book’s own page numbers. Look for the number printed on the page itself." },
+            { text: "Page 112 (the page number printed on the scanned page)", correct: true, why: "That’s the number your reader would use to find the same passage in the original book." },
+            { text: "Page 14 (the total number of pages in the PDF)", why: "That’s just how long the file is." }
+          ]
+        },
+        {
+          prompt: "Your Works Cited entry for an article ends with <strong>pp. 55–70</strong>. The sentence you’re quoting is on page 61. Which citation is correct?",
+          options: [
+            { text: "(Patel and Lee 55–70)", why: "The range belongs in the Works Cited entry. The in-text citation points to the exact page." },
+            { text: "(Patel and Lee 55)", why: "55 is only where the article starts. Your quotation is on 61." },
+            { text: "(Patel and Lee 61)", correct: true, why: "Point your reader to the exact page of the quotation." }
+          ]
+        },
+        {
+          prompt: "You quote an online news article by Tara Nguyen. The website has no page numbers, but when you printed it, your quotation landed on page 2 of the printout. Which citation is correct?",
+          options: [
+            { text: "(Nguyen 2)", why: "Printout pages depend on your printer and screen. They aren’t part of the source, so leave them out." },
+            { text: "(Nguyen)", correct: true, why: "No page numbers in the source means the author’s name alone is the citation." },
+            { text: "(Nguyen, n.d.)", why: "MLA in-text citations never include “n.d.” or a date." }
+          ]
+        }
+      ]
+    });
+  }
+
+  /* ---------- 7. Fix the citation ---------- */
+  function renderFixIt() {
+    renderQuizModule({
+      id: "fixit", nextId: "counterclaim", title: "7. Fix the Citation",
+      intro: "<p>Each sentence below has a citation mistake that shows up often in student essays. Choose the corrected version.</p>",
+      questions: [
+        {
+          prompt: '<div class="example-box"><span class="label">Student sentence</span>Dahl writes, “Then she walked over and made the drinks.” (212)</div>Which revision is correct?',
+          options: [
+            { text: "Dahl writes, “Then she walked over and made the drinks” (212).", correct: true, why: "The period moves to after the citation, so the citation is part of the sentence." },
+            { text: "Dahl writes, “Then she walked over and made the drinks.” (212).", why: "Now there are two periods. Remove the one inside the quotation marks." },
+            { text: "Dahl writes, “Then she walked over and made the drinks.” (Dahl 212)", why: "The period is still inside the quotation marks, and Dahl is named twice." }
+          ]
+        },
+        {
+          prompt: '<div class="example-box"><span class="label">Student sentence</span>The American Library Association notes that “Congress shall make no law abridging the freedom of speech” (American Library Association, n.d.).</div>The source is a website with no page numbers. Which revision is correct?',
+          options: [
+            { text: "…freedom of speech” (American Library Association).", why: "The citation format is right, but the organization is already named in the sentence, so it’s repeated." },
+            { text: "The American Library Association notes that “Congress shall make no law abridging the freedom of speech.”", correct: true, why: "The author is named in the sentence and there’s no page number, so no parenthetical is needed at all. The period goes inside the quotation marks when nothing follows." },
+            { text: "…freedom of speech” (ALA, n.d.).", why: "MLA in-text citations never include “n.d.” or a comma, and abbreviating the name won’t match your Works Cited entry." }
+          ]
+        },
+        {
+          prompt: '<div class="example-box"><span class="label">Student sentence</span>Sleep matters for students. “Students who slept fewer than six hours scored lower on exams” (Patel and Lee 61).</div>What is the problem?',
+          options: [
+            { text: "The citation should be (Patel & Lee 61).", why: "The citation is already correct. MLA spells out “and.”" },
+            { text: "The quotation is dropped in with no signal phrase to introduce it.", correct: true, why: "A quotation should never stand alone as its own sentence. Lead into it: “Patel and Lee report that ‘students who slept…’ (61).”" },
+            { text: "Nothing is wrong.", why: "Look at how the quotation starts its own sentence with no introduction." }
+          ]
+        },
+        {
+          prompt: '<div class="example-box"><span class="label">Student sentence</span>Mary drinks to calm herself, “a strongish one for him, a weak one for herself” (Dahl 212) this shows her habit of keeping control.</div>Which revision is correct?',
+          options: [
+            { text: "…for herself” (Dahl 212). This shows her habit of keeping control.", correct: true, why: "The citation needs a period after it to end the sentence before the analysis begins." },
+            { text: "…for herself.” (Dahl 212) This shows her habit of keeping control.", why: "The period is now inside the quotation marks, and the citation is stranded between sentences." },
+            { text: "…for herself” (Dahl, 212), this shows her habit of keeping control.", why: "MLA doesn’t use a comma before the page, and this creates a run-on sentence." }
+          ]
+        },
+        {
+          prompt: '<div class="example-box"><span class="label">Student sentence</span>Okafor and colleagues found that “gardens increased fresh produce access” (Okafor et al. p. 22).</div>Which revision is correct?',
+          options: [
+            { text: "…access” (Okafor et al. 22).", why: "“p.” is gone, but Okafor is already named in the sentence." },
+            { text: "…access” (22).", correct: true, why: "Okafor is named in the signal phrase, and MLA in-text citations never include “p.” Only the page is needed." },
+            { text: "…access” (pg. 22).", why: "MLA in-text citations never include “p.” or “pg.”" }
+          ]
+        }
+      ]
+    });
+  }
+
+  /* ---------- 8. Counterclaim (drag to order) ---------- */
+  var CC_STEPS = [
+    { id: "state", text: "State the opposing view fairly: “Some readers may argue that…”" },
+    { id: "acknowledge", text: "Briefly acknowledge what’s reasonable about that view." },
+    { id: "pivot", text: "Pivot with a rebuttal transition: “However, this view overlooks…”" },
+    { id: "rebut", text: "Give your rebuttal: reasoning or evidence that answers the opposing view." }
+  ];
+  function shuffledIds() {
+    var ids = CC_STEPS.map(function (s) { return s.id; }), s, tries = 0;
+    do { s = shuffle(ids); tries++; } while (s.join() === ids.join() && tries < 20);
+    return s;
+  }
+  function renderCounterclaim() {
+    if (!state.order) { state.order = shuffledIds(); saveState(); }
+    container().innerHTML =
+      '<section class="card"><h2>8. Counterclaim &amp; Rebuttal</h2>' +
+      "<p>Your third body paragraph is your counterclaim and rebuttal. Instead of giving another reason, it fairly presents the other side of the argument and then shows why your thesis still holds.</p>" +
+      '<div class="callout"><strong>Key terms</strong><ul>' +
+      "<li><strong>Counterclaim:</strong> the opposing view, the argument someone who disagrees with your thesis would make.</li>" +
+      "<li><strong>Rebuttal:</strong> your answer to the counterclaim, the reasoning or evidence that shows why your thesis still holds.</li>" +
+      "<li><strong>Pivot:</strong> the transition that turns the paragraph from the other side back to your argument. It signals to the reader, “Here’s where I disagree.”</li></ul>" +
+      '<div class="example-box" style="margin-bottom:0"><span class="label">Pivot phrases</span>However, … &nbsp;·&nbsp; Even so, … &nbsp;·&nbsp; Nevertheless, … &nbsp;·&nbsp; This view overlooks … &nbsp;·&nbsp; What this argument ignores is …</div></div>' +
+      "<p>A strong counterclaim and rebuttal paragraph follows a predictable order. <strong>Drag the steps</strong> into the correct order, from first to last.</p>" +
+      '<p class="hint">Keyboard: press Tab to reach a step, then use the up and down arrow keys to move it.</p>' +
+      '<ol class="order-list" id="order-list"></ol>' +
+      '<div class="btn-row"><button class="btn" id="check-order-btn">Check Order</button></div>' +
+      '<div id="order-feedback" aria-live="polite"></div>' +
+      '<div id="cc-part2"></div></section>';
+
+    var list = document.getElementById("order-list");
+    state.order.forEach(function (id) {
+      var step = CC_STEPS.filter(function (s) { return s.id === id; })[0];
+      var li = document.createElement("li");
+      li.className = "order-item"; li.tabIndex = 0; li.dataset.id = id;
+      li.innerHTML = '<span class="order-num"></span><span class="order-handle" aria-hidden="true">≡</span><span>' + step.text + "</span>";
+      list.appendChild(li);
+    });
+    function renumber() {
+      list.querySelectorAll(".order-item").forEach(function (li, i) { li.querySelector(".order-num").textContent = i + 1; });
+    }
+    function readOrder() { return Array.prototype.map.call(list.querySelectorAll(".order-item"), function (li) { return li.dataset.id; }); }
+    function changed() {
+      state.order = readOrder(); saveState(); renumber();
+      list.querySelectorAll(".order-item").forEach(function (li) { li.classList.remove("correct-position", "wrong-position"); });
+      if (!state.ccOrderDone) document.getElementById("order-feedback").innerHTML = "";
+    }
+    renumber();
+    makeSortable(list, changed);
+
+    document.getElementById("check-order-btn").addEventListener("click", function () {
+      var correct = CC_STEPS.map(function (s) { return s.id; });
+      var cur = readOrder(), allRight = cur.join() === correct.join();
+      list.querySelectorAll(".order-item").forEach(function (li, i) {
+        li.classList.toggle("correct-position", cur[i] === correct[i]);
+        li.classList.toggle("wrong-position", cur[i] !== correct[i]);
+      });
+      var fb = document.getElementById("order-feedback");
+      if (allRight) {
+        fb.innerHTML = '<div class="feedback-msg good"><strong>That’s the order:</strong> state the view fairly, acknowledge what’s reasonable, pivot, then rebut.</div>';
+        state.ccOrderDone = true; saveState();
+        showPart2();
+      } else {
+        var n = cur.filter(function (id, i) { return id === correct[i]; }).length;
+        fb.innerHTML = '<div class="feedback-msg bad"><strong>' + n + " of 4 are in the right spot</strong> (outlined in green). Remember: you acknowledge the opposing view fairly before you pivot into your rebuttal.</div>";
+      }
+      scrollNear(fb);
+    });
+
+    function showPart2() {
+      var p2 = document.getElementById("cc-part2");
+      p2.innerHTML =
+        "<h3>Now spot the pivot</h3>" +
+        '<div class="example-box"><span class="label">Sample counterclaim paragraph</span>Some students argue that assigned seating treats college students like children. It is true that adults deserve to make their own choices. However, this view overlooks the fact that seating charts are about learning, not control. Chen found that students seated away from friends earned higher quiz scores (118), which shows that the policy supports students’ own goals.</div>' +
+        "<p>Which sentence is the <strong>pivot</strong> into the rebuttal?</p>";
+      buildChoices(p2, {
+        options: [
+          { text: "Some students argue that assigned seating treats college students like children.", why: "That sentence states the opposing view." },
+          { text: "It is true that adults deserve to make their own choices.", why: "That sentence acknowledges what’s reasonable about the other side." },
+          { text: "However, this view overlooks the fact that seating charts are about learning, not control.", correct: true, why: "“However, this view overlooks” turns the paragraph from the other side back to your argument." },
+          { text: "Chen found that students seated away from friends earned higher quiz scores (118), which shows that the policy supports students’ own goals.", why: "That sentence is the rebuttal evidence and analysis. The pivot comes right before it." }
+        ]
+      }, function (fb) {
+        markComplete("counterclaim");
+        fb.insertAdjacentHTML("beforeend", continueBtn("cc-next", "Go to my certificate"));
+        document.getElementById("cc-next").addEventListener("click", function () { goTo("certificate"); });
+      });
+    }
+    if (state.ccOrderDone) {
+      document.getElementById("order-feedback").innerHTML = '<div class="feedback-msg good">Order complete.</div>';
+      showPart2();
+    }
+  }
+
+  /* Pointer-based drag-to-reorder (works with mouse, touch, and pen) plus arrow keys. */
+  function makeSortable(list, onChange) {
+    var item = null, ph = null, offY = 0, pid = null, startY = 0, moved = false;
+    list.addEventListener("pointerdown", function (e) {
+      var li = e.target.closest(".order-item");
+      if (!li || e.button !== 0) return;
+      e.preventDefault();
+      item = li; pid = e.pointerId; startY = e.clientY; moved = false;
+      offY = e.clientY - li.getBoundingClientRect().top;
+      document.addEventListener("pointermove", onMove);
+      document.addEventListener("pointerup", onUp);
+      document.addEventListener("pointercancel", onUp);
+    });
+    function begin() {
+      var r = item.getBoundingClientRect();
+      ph = document.createElement("li"); ph.className = "order-placeholder"; ph.style.height = r.height + "px";
+      list.insertBefore(ph, item.nextSibling);
+      item.classList.add("dragging");
+      item.style.position = "fixed"; item.style.zIndex = 1000;
+      item.style.left = r.left + "px"; item.style.top = r.top + "px"; item.style.width = r.width + "px";
+      moved = true;
+    }
+    function onMove(e) {
+      if (e.pointerId !== pid || !item) return;
+      if (!moved) { if (Math.abs(e.clientY - startY) < 5) return; begin(); }
+      item.style.top = (e.clientY - offY) + "px";
+      var siblings = Array.prototype.filter.call(list.querySelectorAll(".order-item"), function (el) { return el !== item; });
+      var before = null;
+      for (var i = 0; i < siblings.length; i++) {
+        var r = siblings[i].getBoundingClientRect();
+        if (e.clientY < r.top + r.height / 2) { before = siblings[i]; break; }
+      }
+      if (before) list.insertBefore(ph, before); else list.appendChild(ph);
+      /* auto-scroll near the window edges */
+      if (e.clientY < 60) window.scrollBy(0, -12);
+      else if (e.clientY > window.innerHeight - 60) window.scrollBy(0, 12);
+    }
+    function onUp(e) {
+      if (e.pointerId !== pid) return;
+      document.removeEventListener("pointermove", onMove);
+      document.removeEventListener("pointerup", onUp);
+      document.removeEventListener("pointercancel", onUp);
+      if (moved && item) {
+        list.insertBefore(item, ph); ph.remove();
+        item.classList.remove("dragging");
+        item.style.position = item.style.zIndex = item.style.left = item.style.top = item.style.width = "";
+        onChange();
+      }
+      item = null; ph = null; moved = false;
+    }
+    list.addEventListener("keydown", function (e) {
+      var li = e.target.closest(".order-item");
+      if (!li) return;
+      if (e.key === "ArrowUp" && li.previousElementSibling) { e.preventDefault(); list.insertBefore(li, li.previousElementSibling); li.focus(); onChange(); }
+      else if (e.key === "ArrowDown" && li.nextElementSibling) { e.preventDefault(); list.insertBefore(li.nextElementSibling, li); li.focus(); onChange(); }
+    });
+  }
+
+  /* ---------- 9. Certificate ---------- */
+  function makeCertId(name) {
+    var h = 0;
+    for (var i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0;
+    var alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789", code = "";
+    for (var j = 0; j < 4; j++) { code += alphabet[h % alphabet.length]; h = Math.floor(h / alphabet.length); }
+    for (var k = 0; k < 4; k++) code += alphabet[Math.floor(Math.random() * alphabet.length)];
+    var d = new Date();
+    var ymd = String(d.getFullYear()).slice(2) + String(d.getMonth() + 1).padStart(2, "0") + String(d.getDate()).padStart(2, "0");
+    return "MLA-" + ymd + "-" + code.slice(0, 4) + "-" + code.slice(4);
+  }
+  function renderCertificate() {
+    if (!isUnlocked("certificate")) {
+      container().innerHTML = '<section class="card"><h2>9. Certificate</h2><p>Finish the Counterclaim &amp; Rebuttal section first.</p></section>';
+      return;
+    }
+    container().innerHTML =
+      '<section class="card certificate-panel"><h2>9. Your Certificate</h2>' +
+      '<div class="no-print"><p>Enter your full name exactly as you’d like it to appear, then generate your certificate.</p>' +
+      '<input type="text" class="name-input" id="name-input" placeholder="First and last name" value="' + escapeHtml(state.studentName) + '" />' +
+      '<div class="btn-row" style="justify-content:center"><button class="btn" id="generate-btn">Generate My Certificate</button></div></div>' +
+      '<div id="certificate-output"></div></section>';
+    var nameInput = document.getElementById("name-input");
+    nameInput.addEventListener("input", function () { state.studentName = nameInput.value; saveState(); });
+    document.getElementById("generate-btn").addEventListener("click", function () {
+      var name = nameInput.value.trim();
+      if (!name) { nameInput.focus(); return; }
+      state.studentName = name;
+      if (!state.certId || state.certName !== name) {
+        state.certId = makeCertId(name);
+        state.certName = name;
+        state.certDate = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+      }
+      markComplete("certificate"); saveState();
+      showCertificate();
+    });
+    if (state.completed.certificate && state.certId) showCertificate();
+  }
+  function showCertificate() {
+    var out = document.getElementById("certificate-output");
+    out.innerHTML =
+      '<div class="certificate">' +
+      '<p class="cert-eyebrow">Composition Workshop</p>' +
+      "<h2>Certificate of Completion</h2>" +
+      '<p class="cert-detail">This certifies that</p>' +
+      '<div class="cert-name">' + escapeHtml(state.certName) + "</div>" +
+      '<p class="cert-detail">has successfully completed the <strong>MLA Evidence Integration Lab</strong> and can:</p>' +
+      "<ul>" +
+      "<li>Build body paragraphs that move from reason to evidence to analysis</li>" +
+      "<li>Introduce quotations with signal phrases and present-tense verbs</li>" +
+      "<li>Format MLA in-text citations with no “p.” and no comma before the page</li>" +
+      "<li>Match in-text citations to Works Cited entries, including sources with two or more authors, no author, or no page numbers</li>" +
+      "<li>Choose the correct page number to cite</li>" +
+      "<li>Organize a counterclaim and rebuttal paragraph</li>" +
+      "</ul>" +
+      '<div class="cert-footer">' +
+      '<div><span class="cert-line">' + escapeHtml(state.certDate) + "</span><small>Date Completed</small></div>" +
+      '<div><span class="cert-line cert-id">' + escapeHtml(state.certId) + "</span><small>Certificate No.</small></div>" +
+      '<div><span class="cert-line">Professor Esch</span><small>Instructor</small></div>' +
+      "</div></div>" +
+      '<div class="btn-row" style="justify-content:center"><button class="btn" id="print-btn">Print / Save as PDF</button><button class="btn secondary" id="checker-btn">Try the optional Paragraph Checker</button></div>';
+    document.getElementById("print-btn").addEventListener("click", function () { window.print(); });
+    document.getElementById("checker-btn").addEventListener("click", function () { goTo("checker"); });
+  }
+
+  /* ---------- Optional: Paragraph Checker ---------- */
+  var REPORTING = /\b(argues?|argued|explains?|explained|notes?|noted|states?|stated|claims?|claimed|suggests?|suggested|contends?|observes?|writes?|wrote|points? out|shows?|showed|says|said|describes?|emphasi[sz]es?|insists?|reports?|reported|asserts?|adds?|added|acknowledges?|admits?|maintains?|warns?|reveals?|illustrates?|demonstrates?|highlights?|stresses|concludes?|believes?|finds|found|according to|mentions?|declares?|recalls?|questions?|proposes?|reminds?|describes?|tells?|told|asks?)\b/i;
+  var OPPOSING = /\b(some (people|readers|critics|students|parents|experts|scholars|teachers|americans|may|might|would|could|argue|believe|claim|say|think|feel|insist)|others (may |might )?(argue|believe|claim|say|think|feel|insist)|many (people )?(argue|believe|claim|think|feel)|opponents|critics|skeptics|those who (believe|argue|think|oppose|support)|it (could|can|may|might) be argued|one (could|might|may) argue|admittedly|granted|it is true that|while it is true|on the other hand|the other side|opposing (view|side|argument)|counter ?arguments?|people who (disagree|oppose))\b/i;
+  var PIVOT = /\b(however|but|yet|nevertheless|nonetheless|even so|still|in fact|on the contrary|in reality|actually|the truth is|overlooks?|ignores?|fails? to|although|though|despite|ultimately|regardless|this (view|argument|claim|idea|position) (is|overlooks|ignores|fails|misses))\b/i;
+
+  function snippet(s, words) {
+    var w = s.trim().split(/\s+/);
+    return escapeHtml(w.slice(0, words || 6).join(" ")) + (w.length > (words || 6) ? "…" : "");
+  }
+
+  var STOP = ("about above after again against because before being below between both could does doing during each from further have having into itself just more most other over same should some such than that their them then there these they this those through under until very were what when where which while with would your also only many much will been make made makes like even every need needs should must more less into onto upon among within without people thing things").split(" ");
+  function keyWords(str) {
+    return (str.toLowerCase().match(/[a-z]{4,}/g) || []).filter(function (w) { return STOP.indexOf(w) === -1; });
+  }
+  function sharedKeyWords(a, b) {
+    var A = keyWords(a), out = [];
+    keyWords(b).forEach(function (w) {
+      var hit = A.filter(function (x) { return x.slice(0, 5) === w.slice(0, 5); })[0];
+      if (hit && out.indexOf(w) === -1) out.push(w);
+    });
+    return out;
+  }
+
+  function analyzeParagraph(raw, type, pages, thesis) {
+    var issues = [], good = [];
+    var t = raw.replace(/\s+/g, " ").trim();
+    var wordCount = t ? t.split(" ").length : 0;
+    if (wordCount < 25) {
+      issues.push("This looks too short to check. Paste your full paragraph (at least a few sentences).");
+      return { issues: issues, good: good };
+    }
+
+    /* doubled quotation marks like “"Congress */
+    if (/[“”"]\s?[“”"]/.test(t.replace(/”\s+“/g, ""))) {
+      issues.push("You have doubled quotation marks somewhere (for example <span class=\"issue-snippet\">“\"</span>). Use just one set around each quotation.");
+    }
+    t = t.replace(/([“”"])[“”"]/g, "$1");
+
+    /* missing space after a period, like "harm.The" */
+    var noSpace = (t.match(/[A-Za-z”")]+[.!?][A-Z][a-z]+/g) || []).concat(
+      (t.match(/\b[a-z]{2,}\.[a-z]{3,}\b/g) || []).filter(function (x) { return !/^(www|e\.g|i\.e)|\.(com|org|edu|net|gov|html?)$/i.test(x); }));
+    noSpace = noSpace.filter(function (x, i) { return noSpace.indexOf(x) === i; });
+    if (!noSpace.length) noSpace = null;
+    if (noSpace) {
+      issues.push("Add a space after the period here: " + noSpace.slice(0, 3).map(function (m) { return '<span class="issue-snippet">' + escapeHtml(m) + "</span>"; }).join(", ") + ".");
+    }
+
+    /* unbalanced quotation marks */
+    var qmCount = (t.match(/[\u201c\u201d"]/g) || []).length;
+    var unbalanced = qmCount % 2 === 1;
+    if (unbalanced) issues.push("<strong>Quotation marks:</strong> one of your quotations is missing an opening or closing quotation mark. Every quotation needs a mark at the start <em>and</em> the end.");
+
+    /* find quotations */
+    var quotes = [], qre = /[“"]([^“”"]+)[”"]/g, m;
+    while ((m = qre.exec(t))) quotes.push({ text: m[1], start: m.index, end: m.index + m[0].length });
+    var evidence = quotes.filter(function (q) { return q.text.trim().split(/\s+/).length >= 5; });
+
+    /* find parenthetical citations */
+    var cites = [], pre = /\(([^()]{1,90})\)/g;
+    while ((m = pre.exec(t))) {
+      var inner = m[1].trim();
+      var pageOnly = /^(\d+|[ivxlc]+)(\s*[-–]\s*\d+)?$/i.test(inner);
+      var looks = pageOnly || /^[“"A-Z]/.test(inner) && inner.split(/\s+/).length <= 9;
+      var hasP = /\b(p|pp|pg)\.?\s*\d/i.test(inner);
+      var hasYear = /\b(1[5-9]|20)\d{2}\b/.test(inner) && !/^\d+$/.test(inner) || /n\.\s?d\.?/i.test(inner);
+      if (!looks && !hasP) continue;
+      cites.push({ inner: inner, full: m[0], start: m.index, end: m.index + m[0].length, pageOnly: pageOnly, hasP: hasP, hasYear: hasYear,
+        comma: /,\s*(\d|p|pg|n\.d)/i.test(inner), hasPage: /\d+(\s*[-–]\s*\d+)?$/.test(inner) && !/\b(1[5-9]|20)\d{2}$/.test(inner) });
+    }
+
+    if (evidence.length === 2) {
+      good.push("Found both quotations. Each paragraph needs two.");
+    } else if (evidence.length < 2) {
+      issues.push("<strong>Two quotations:</strong> each paragraph needs <strong>two</strong> quotations from your sources. I found " + (evidence.length === 0 ? "none" : "only one") + ". (If you have one and it isn\u2019t showing up, check that it has quotation marks at both ends.)");
+    } else {
+      issues.push("<strong>Two quotations:</strong> each paragraph needs exactly two quotations, and I found " + evidence.length + ". Keep your two strongest and explain them in your own words.");
+    }
+
+    /* citation format problems */
+    var formatProblems = 0;
+    cites.forEach(function (c) {
+      var shown = '<span class="issue-snippet">' + escapeHtml(c.full) + "</span>";
+      if (c.hasYear) { issues.push(shown + ": MLA in-text citations don’t include a year or “n.d.” Use the author and page, or just the author if there’s no page."); formatProblems++; }
+      else if (c.hasP) { issues.push(shown + ": MLA in-text citations never include “p.” or “pg.” Just the number: (Author 42)."); formatProblems++; }
+      else if (c.comma) { issues.push(shown + ": MLA in-text citations never include a comma between the author and the page. Write (Author 42)."); formatProblems++; }
+      else if (!c.hasPage && pages === "yes") {
+        issues.push(shown + " has no page number. You said your source has page numbers, so add the page inside the parentheses, for example (" + escapeHtml(c.inner) + " 12) with your real page number."); formatProblems++;
+      }
+    });
+    if (cites.length && !formatProblems) good.push("Your parenthetical citations are formatted the MLA way.");
+
+    /* per-quotation checks */
+    var bombs = 0, rows = [];
+    evidence.forEach(function (q, idx) {
+      var row = { quote: snippet(q.text, 5), sp: "ok", qm: unbalanced ? "warn" : "ok", cite: "no", period: "no" };
+      rows.push(row);
+      var nextStart = idx + 1 < evidence.length ? evidence[idx + 1].start : t.length;
+      var cite = cites.filter(function (c) { return c.start >= q.end - 1 && c.start <= Math.min(nextStart, q.end + 160); })[0];
+      var lead = t.slice(0, q.start);
+      var sentStart = Math.max(lead.lastIndexOf(". "), lead.lastIndexOf("? "), lead.lastIndexOf("! "), lead.lastIndexOf(") "));
+      var leadIn = lead.slice(sentStart + 1).trim();
+      var named = REPORTING.test(leadIn) && /[A-Z][a-z]+/.test(leadIn);
+      var shown = '<span class="issue-snippet">“' + snippet(q.text) + "”</span>";
+
+      if (!leadIn) row.sp = "no";
+      else if (!(REPORTING.test(leadIn) || /according to/i.test(leadIn))) row.sp = "warn";
+      if (row.sp === "warn") issues.push("<strong>Signal phrase:</strong> the quotation " + shown + " is introduced, but I couldn\u2019t find a reporting verb (argues, explains, notes, writes\u2026). Check that your signal phrase names the author and uses a present-tense verb.");
+      if (!leadIn) {
+        bombs++;
+        issues.push("The quotation " + shown + " starts its own sentence with no introduction. Lead into it with a signal phrase, such as <em>Dahl writes that…</em>");
+      }
+      if (!cite) {
+        var dotIn = t.charAt(q.end - 2) === "." || /^\s*\./.test(t.slice(q.end));
+        if (pages === "no" && named) {
+          row.cite = "na";
+          var inside = t.charAt(q.end - 2), next = t.slice(q.end).match(/^\s*(\S)?/);
+          row.period = (/[.,!?]/.test(inside) || (next && next[1] && /[.,;a-z]/.test(next[1]))) ? "ok" : "no";
+          return;
+        }
+        if (pages === "no") issues.push("The quotation " + shown + " has no citation. If the author isn’t named in your sentence, add (Author) after it.");
+        else issues.push("The quotation " + shown + " doesn’t have a parenthetical citation after it. Add (Author Page#), or just (Page#) if you named the author in the sentence.");
+        return;
+      }
+      row.cite = (cite.hasYear || cite.hasP || cite.comma || (!cite.hasPage && pages === "yes")) ? "no" : "ok";
+      var nextCh = t.slice(cite.end).match(/^\s*(\S)?/);
+      row.period = (t.charAt(q.end - 2) !== "." && (!nextCh || !nextCh[1] ? false : /[.!?;,]/.test(nextCh[1]))) ? "ok" : "no";
+      var between = t.slice(q.end, cite.start);
+      var closingChar = t.charAt(q.end - 2);
+      if (/[.]/.test(closingChar)) {
+        issues.push("In the quotation " + shown + ", move the period from inside the quotation marks to after the citation: …” " + escapeHtml(cite.full) + ".");
+      }
+      if (between === "") issues.push("Add a space between the closing quotation mark and the citation: ” " + escapeHtml(cite.full) + ".");
+      var after = t.slice(cite.end).match(/^\s*(\S)/);
+      if (after && /[A-Za-z]/.test(after[1])) {
+        issues.push("The citation " + '<span class="issue-snippet">' + escapeHtml(cite.full) + "</span> needs a period (or other punctuation) after it before the next sentence starts.");
+      }
+    });
+    if (evidence.length && !bombs) good.push("Every quotation is introduced in your own words.");
+    if (evidence.some(function (q) { var lead = t.slice(Math.max(0, q.start - 120), q.start); return REPORTING.test(lead); })) {
+      good.push("Found a signal phrase introducing your evidence.");
+    }
+
+    /* ---- first sentence (topic sentence or counterclaim opener) ---- */
+    var fsMatch = t.match(/^.*?[.!?][”"]?(?=\s+[A-Z“"(]|\s*$)/);
+    var fs = (fsMatch ? fsMatch[0] : t).trim();
+    var fsShown = '<span class="issue-snippet">' + snippet(fs, 8) + "</span>";
+    if (type === "body") {
+      var tsProblems = 0;
+      if (/[“"]/.test(fs) || /\([^()]*\d[^()]*\)|\([A-Z][^()]*\)/.test(fs)) {
+        issues.push("<strong>Topic sentence:</strong> your paragraph opens with a quotation or citation (" + fsShown + "). Start with your own topic sentence: one reason your thesis is true, in your own words. Bring in evidence after that."); tsProblems++;
+      }
+      if (/\?\s*$/.test(fs)) {
+        issues.push("<strong>Topic sentence:</strong> your first sentence is a question. Turn it into a statement that gives one reason your thesis is true."); tsProblems++;
+      }
+      if (/\b(in this paragraph|this paragraph (will|is about|discusses)|i will (discuss|talk about|explain|show)|i am going to)\b/i.test(fs)) {
+        issues.push("<strong>Topic sentence:</strong> skip announcing what the paragraph will do (" + fsShown + "). Just state your reason directly."); tsProblems++;
+      }
+      if (OPPOSING.test(fs)) {
+        issues.push("<strong>Topic sentence:</strong> your first sentence sounds like the opposing view. In a body paragraph, open with <em>your</em> reason. The other side belongs in Body Paragraph 3, your counterclaim and rebuttal."); tsProblems++;
+      }
+      if (!tsProblems && fs.split(/\s+/).length < 6) {
+        issues.push("<strong>Topic sentence:</strong> your first sentence is very short. Make sure it clearly states one reason that supports your thesis."); tsProblems++;
+      }
+      var th = (thesis || "").trim();
+      if (th.split(/\s+/).length >= 5) {
+        var shared = sharedKeyWords(th, fs);
+        if (!shared.length) {
+          issues.push("<strong>Topic sentence:</strong> " + fsShown + " doesn’t share any key words with your thesis. Try the “because” test: <em>[your thesis] because [your topic sentence]</em>. If it doesn’t make sense, revise so your reason clearly connects to your thesis."); tsProblems++;
+        } else if (!tsProblems) {
+          good.push("Your topic sentence connects to your thesis (both mention “" + escapeHtml(shared.slice(0, 2).join("” and “")) + "”).");
+        }
+      }
+      if (!tsProblems && !(th.split(/\s+/).length >= 5)) good.push("Your paragraph opens with your own topic sentence, not a quotation.");
+    } else if (type === "counter") {
+      var oppFirst = OPPOSING.test(fs);
+      var oppAny = t.match(OPPOSING);
+      if (oppAny && !oppFirst) {
+        issues.push("<strong>Opening:</strong> your opposing view doesn’t show up until partway through the paragraph. Open Body Paragraph 3 by stating the other side, then pivot to your rebuttal.");
+      } else if (oppFirst) {
+        good.push("Your paragraph opens by stating the opposing view.");
+      }
+    }
+
+    /* ---- analysis between and after pieces of evidence ---- */
+    var ANALYSIS = /\b(shows?|suggests?|means|proves?|reveals?|demonstrates?|illustrates?|highlights?|indicates?|implies|emphasi[sz]es|symboli[sz]es|represents?|in other words|as a result|this is (important|significant) because|this matters because|therefore|thus)\b/i;
+    if (evidence.length) {
+      var foundAnalysis = null;
+      evidence.forEach(function (q, idx) {
+        var c = cites.filter(function (x) { return x.start >= q.end - 1 && x.start <= q.end + 160; })[0];
+        var from = c ? c.end : q.end;
+        var to = idx + 1 < evidence.length ? evidence[idx + 1].start : t.length;
+        var between = t.slice(from, to);
+        var m2 = between.match(ANALYSIS);
+        if (m2 && !foundAnalysis) { var pre = between.slice(0, m2.index).split(/[.!?]\s+/).pop().trim().split(/\s+/).slice(-2).join(" "); foundAnalysis = (pre ? pre + " " : "") + m2[0]; }
+        if (idx + 1 < evidence.length) {
+          var leadNext = t.slice(from, to);
+          /* words between this citation and the start of the next quotation's sentence */
+          var nextSentStart = Math.max(leadNext.lastIndexOf(". "), leadNext.lastIndexOf("? "), leadNext.lastIndexOf("! "));
+          var explain = nextSentStart > 0 ? leadNext.slice(0, nextSentStart) : "";
+          if (explain.replace(/^[\s.]+/, "").split(/\s+/).filter(Boolean).length < 6) {
+            issues.push("<strong>Analysis:</strong> the quotation " + '<span class="issue-snippet">“' + snippet(q.text) + "”</span> is followed right away by another quotation. Explain what the first one shows before you bring in the next.");
+          }
+        }
+      });
+      if (foundAnalysis) good.push("Found analysis language explaining your evidence (“" + escapeHtml(foundAnalysis) + "…”).");
+      else issues.push("<strong>Analysis:</strong> I couldn’t find a sentence that clearly explains your evidence. After a quotation, tell the reader what it means and why it matters. Try starters like “This shows that…,” “In other words,…,” or “This matters because…”");
+    }
+
+    /* analysis after the last piece of evidence */
+    if (evidence.length) {
+      var lastQ = evidence[evidence.length - 1];
+      var lastC = cites.filter(function (c) { return c.start >= lastQ.end - 1; })[0];
+      var tail = t.slice(lastC ? lastC.end : lastQ.end).replace(/^[\s.]+/, "");
+      var tailWords = tail.split(/\s+/).filter(Boolean).length;
+      if (tailWords < 3) {
+        issues.push("Your paragraph ends on a quotation. Finish with at least one sentence of your own analysis explaining what the evidence proves.");
+      } else if (tailWords < 12) {
+        issues.push("Your analysis after the last quotation is very brief. Add a sentence or two explaining what the evidence proves and how it supports your point.");
+      } else {
+        good.push("You follow your last quotation with your own analysis.");
+      }
+      var quotedWords = evidence.reduce(function (n, q) { return n + q.text.split(/\s+/).length; }, 0);
+      if (quotedWords / wordCount > 0.5) issues.push("More than half of this paragraph is quoted. Shorten your quotations and add more of your own explanation.");
+    }
+
+    /* first person anywhere outside of quotations */
+    var outside = t.replace(/[“"][^“”"]*[”"]/g, "“…”");
+    var sents = outside.match(/[^.!?]+[.!?]*/g) || [];
+    var fp = sents.filter(function (x) { return /\b(I|I'm|I’m|I've|I’ve|I'd|I’d|I'll|I’ll|me|my|mine|myself)\b/.test(x); });
+    if (fp.length) {
+      issues.push("<strong>First person:</strong> " + (fp.length === 1 ? "this sentence uses" : fp.length + " sentences use") + " “I” (or me/my): " +
+        fp.slice(0, 3).map(function (x) {
+          var w = x.trim().split(/\s+/), k = 0;
+          for (var i = 0; i < w.length; i++) if (/^(I|I'm|I’m|I've|I’ve|I'd|I’d|I'll|I’ll|me|my|mine|myself)[,.;:!?]*$/.test(w[i])) { k = i; break; }
+          var a0 = Math.max(0, k - 3), a1 = Math.min(w.length, k + 5);
+          var html = w.slice(a0, a1).map(function (word, j) { return a0 + j === k ? "<strong>" + escapeHtml(word) + "</strong>" : escapeHtml(word); }).join(" ");
+          return '<span class="issue-snippet">' + (a0 > 0 ? "…" : "") + html + (a1 < w.length ? "…" : "") + "</span>";
+        }).join(", ") +
+        ". Academic writing avoids first person. Rewrite so the sentence states your point directly, for example change “I believe alcohol shows…” to “Alcohol shows…”");
+    }
+
+    if (type === "counter") {
+      var o = t.match(OPPOSING);
+      if (o) {
+        if (!OPPOSING.test(fs)) good.push("Found language that states the opposing view (“" + escapeHtml(o[0]) + "”).");
+        var afterOpp = t.slice(o.index + o[0].length);
+        var p = afterOpp.match(PIVOT);
+        if (p) good.push("Found a rebuttal pivot (“" + escapeHtml(p[0]) + "”).");
+        else issues.push("After you state the opposing view, pivot into your rebuttal with a clear transition, such as “However, this view overlooks…”");
+      } else {
+        issues.push("I couldn’t find where you state the opposing view. Make it clear with a phrase like “Some readers may argue that…” or “Critics claim that…”");
+        if (!PIVOT.test(t)) issues.push("Add a clear pivot into your rebuttal, such as “However, this view overlooks…”");
+      }
+    }
+    while (rows.length < 2) rows.push({ missing: true, quote: "Quotation " + (rows.length + 1) + ": not found" });
+    return { issues: issues, good: good, rows: rows };
+  }
+
+  function formulaTable(rows) {
+    if (!rows || !rows.length) return "";
+    var sym = { ok: '<span class="ft ok" title="Looks right">\u2713</span>', no: '<span class="ft no" title="Missing or incorrect">\u2716</span>',
+      warn: '<span class="ft warn" title="Check this">!</span>', na: '<span class="ft na" title="Not needed: author named and no page numbers">not needed</span>' };
+    return '<div class="formula-check"><strong>Evidence Formula Check</strong><p class="hint" style="margin:2px 0 8px">Your paragraph needs two quotations, and each one needs all four parts. \u2716 = missing or incorrect (see details below). ! = check this.</p>' +
+      '<table><thead><tr><th>Quotation</th><th>Signal phrase</th><th>Quotation marks</th><th>In-text citation</th><th>Period after citation</th></tr></thead><tbody>' +
+      rows.map(function (r) {
+        if (r.missing) return '<tr class="ft-missing"><td class="ft-q"><em>' + r.quote + "</em></td><td>" + sym.no + "</td><td>" + sym.no + "</td><td>" + sym.no + "</td><td>" + sym.no + "</td></tr>";
+        return "<tr><td class=\"ft-q\">\u201c" + r.quote + "\u201d</td><td>" + sym[r.sp] + "</td><td>" + sym[r.qm] + "</td><td>" + sym[r.cite] + "</td><td>" + sym[r.period] + "</td></tr>";
+      }).join("") + "</tbody></table></div>";
+  }
+
+  function renderChecker() {
+    var c = state.checker;
+    function radio(name, val, cur, label) {
+      return '<label><input type="radio" name="' + name + '" value="' + val + '"' + (cur === val ? " checked" : "") + " /> <span>" + label + "</span></label>";
+    }
+    container().innerHTML =
+      '<section class="card"><h2>Optional: Paragraph Checker</h2>' +
+      "<p>Now, check a paragraph from your own persuasive essay. Copy one paragraph from your essay, paste it into the box below, and click <strong>Check My Paragraph</strong> to see whether your quotations and in-text citations are formatted correctly. You can check as many paragraphs as you like, one at a time. This is optional and doesn’t affect your certificate.</p>" +
+      '<div class="callout gold"><strong>Keep in mind:</strong> this checker looks for patterns. It can’t read your Works Cited page or your source, so it may miss things or flag something that’s actually fine. Use it as a guide, not a grade.</div>' +
+      '<div class="checker-options">' +
+      '<fieldset class="opt-group"><legend>What kind of paragraph?</legend>' +
+      radio("ptype", "body", c.type, "Body paragraph") + radio("ptype", "counter", c.type, "Counterclaim &amp; rebuttal paragraph") + "</fieldset>" +
+      '<fieldset class="opt-group"><legend>Does your source have page numbers?</legend>' +
+      radio("pages", "yes", c.pages, "Yes (book, PDF, journal article)") + radio("pages", "no", c.pages, "No (website or online article)") + radio("pages", "mixed", c.pages, "I used both kinds") + "</fieldset>" +
+      "</div>" +
+      '<div id="thesis-wrap"' + (c.type === "body" ? "" : ' style="display:none"') + '><label for="thesis-input" class="chip-bank-label">Your thesis statement (optional)</label>' +
+      '<textarea class="coach-input" id="thesis-input" style="min-height:64px" placeholder="Paste your thesis here so the checker can see whether your topic sentence connects to it...">' + escapeHtml(c.thesis || "") + "</textarea></div>" +
+      '<label for="coach-textarea" class="chip-bank-label">Your paragraph</label>' +
+      '<textarea class="coach-input" id="coach-textarea" placeholder="Paste your paragraph here...">' + escapeHtml(c.text) + "</textarea>" +
+      '<div class="btn-row"><button class="btn" id="check-btn">Check My Paragraph</button></div>' +
+      '<div id="coach-feedback" aria-live="polite"></div></section>';
+
+    var ta = document.getElementById("coach-textarea");
+    ta.addEventListener("input", function () { c.text = ta.value; saveState(); });
+    var thIn = document.getElementById("thesis-input");
+    thIn.addEventListener("input", function () { c.thesis = thIn.value; saveState(); });
+    container().querySelectorAll('input[type="radio"]').forEach(function (r) {
+      r.addEventListener("change", function () {
+        if (r.name === "ptype") { c.type = r.value; document.getElementById("thesis-wrap").style.display = c.type === "body" ? "" : "none"; } else c.pages = r.value;
+        saveState();
+        document.getElementById("coach-feedback").innerHTML = "";
+      });
+    });
+    document.getElementById("check-btn").addEventListener("click", function () {
+      c.text = ta.value; saveState();
+      var res = analyzeParagraph(ta.value, c.type, c.pages, c.type === "body" ? thIn.value : "");
+      var fb = document.getElementById("coach-feedback");
+      var n = res.issues.length, html = "";
+      html += '<div class="check-summary ' + (n ? "has-issues" : "no-issues") + '">' +
+        (n ? "⚠ " + n + " thing" + (n > 1 ? "s" : "") + " to look at" + (res.good.length ? " and " + res.good.length + " thing" + (res.good.length > 1 ? "s" : "") + " done well" : "") + ". Details below."
+           : "✓ No problems flagged. Nice work.") + "</div>";
+      html += formulaTable(res.rows);
+      if (n) html += '<div class="feedback-msg bad"><strong>Fix these first:</strong><ul>' + res.issues.map(function (i) { return "<li>" + i + "</li>"; }).join("") + "</ul></div>";
+      if (res.good.length) html += '<div class="feedback-msg good"><strong>Looking good:</strong><ul>' + res.good.map(function (g) { return "<li>" + g + "</li>"; }).join("") + "</ul></div>";
+      fb.innerHTML = html;
+      markComplete("checker");
+      fb.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }
+
+  /* ---------- Init ---------- */
+  function init() { renderSidebar(); renderProgress(); renderModule(); }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
+})();
+</script>
 </body>
 </html>
