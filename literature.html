@@ -434,7 +434,7 @@ textarea.coach-input:focus { outline: 3px solid var(--gold); border-color: var(-
       '<div class="callout"><strong>The formula:</strong> Reason &rarr; Evidence &rarr; Analysis. Your <strong>reason</strong> is your topic sentence: the literary device you are analyzing and what it shows about the story, in support of your thesis. A paragraph that only quotes the story, without explaining what the author’s words show, isn’t doing its job yet.</div>' +
       "<p>In this lab you will:</p>" +
       "<ul><li>Identify the parts of a literary analysis paragraph</li><li>Build quotation sentences that bring in the author’s words</li><li>Keep the author, the narrator, and the characters straight</li><li>Turn Works Cited entries (stories, anthologies, and critics) into correct in-text citations</li><li>Find the right page number to cite</li><li>Fix common citation mistakes</li></ul>" +
-      '<div class="callout"><strong>About the practice sources:</strong> The examples come from “The Tell-Tale Heart” by Edgar Allan Poe and “A Rose for Emily” by William Faulkner. The anthology, the critics, their articles, and every page number are made up for practice. In your own essay, cite the page numbers in <em>your</em> copy of the story, and quote the exact words from the version you cite. If your copy is adapted or simplified, its wording may differ from the original. Your own essay (five to six paragraphs) will analyze the literary devices you chose in your literary matrix, so your analysis will look different from these examples.</div>' +
+      '<div class="callout"><strong>About the practice sources:</strong> The examples come from “The Tell-Tale Heart” by Edgar Allan Poe and “A Rose for Emily” by William Faulkner. The anthology, the critics, their articles, and every page number are made up for practice. In your own essay, cite the page numbers in <em>your</em> copy of the story, and quote the exact words from the version you cite. If your copy is adapted or simplified, its wording may differ from the original. Your own essay will look different from these examples. Whether you are analyzing literary devices from your literary matrix, evaluating the story, or writing about a social theme in a research paper, your assignment sheet decides your topic, length, and number of sources. This lab teaches the skill every version needs: using evidence correctly.</div>' +
       "<p>When you finish, you’ll earn a certificate. After that, an optional <strong>Paragraph Checker</strong> is available if you’d like feedback on your own writing.</p>" +
       continueBtn("next-btn", "Begin") + "</section>";
     document.getElementById("next-btn").addEventListener("click", function () { markComplete("welcome"); goTo("parts"); });
@@ -495,14 +495,14 @@ textarea.coach-input:focus { outline: 3px solid var(--gold); border-color: var(-
       "<p>Here’s where your paragraphs fit in the whole essay:</p>" +
       '<div class="roadmap">' +
       '<div class="roadmap-step">Introduction<small>+ Thesis</small></div><div class="roadmap-arrow">&rarr;</div>' +
-      '<div class="roadmap-step">Body Paragraph 1<small>Device 1</small></div><div class="roadmap-arrow">&rarr;</div>' +
-      '<div class="roadmap-step">Body Paragraph 2<small>Device 2</small></div><div class="roadmap-arrow">&rarr;</div>' +
-      '<div class="roadmap-step">Body Paragraph 3<small>Device 3 (and 4)</small></div><div class="roadmap-arrow">&rarr;</div>' +
+      '<div class="roadmap-step">Body Paragraph 1<small>Point 1</small></div><div class="roadmap-arrow">&rarr;</div>' +
+      '<div class="roadmap-step">Body Paragraph 2<small>Point 2</small></div><div class="roadmap-arrow">&rarr;</div>' +
+      '<div class="roadmap-step">Body Paragraph 3<small>Point 3 (and more)</small></div><div class="roadmap-arrow">&rarr;</div>' +
       '<div class="roadmap-step">Conclusion<small>Wrap-up</small></div>' +
       "</div>" +
-      '<div class="callout gold"><strong>Your essay is five to six paragraphs:</strong> an introduction, three or four body paragraphs, and a conclusion. Each body paragraph focuses on one literary device you chose from your literary matrix (for example symbolism, imagery, irony, point of view, characterization, or setting). Your devices and your analysis will be different from your classmates’, so the examples in this lab show the pattern, not the answer.</div>' +
+      '<div class="callout gold"><strong>Every essay follows this shape:</strong> an introduction that ends with a thesis, body paragraphs that each prove one point, and a conclusion. Your assignment sheet tells you how many body paragraphs to write and what each one covers. In a literary analysis, a body paragraph usually focuses on one literary device from your literary matrix (for example symbolism, imagery, irony, point of view, characterization, or setting). In an evaluative essay, it covers one criterion. In a research paper, a body paragraph may explain a social theme or issue and bring in your outside sources. Your topics will differ from your classmates’, so the examples in this lab show the pattern, not the answer.</div>' +
       '<div class="callout"><strong>Your introduction</strong> names the author and the title of the story, gives a little context, and ends with your thesis. Story titles go in quotation marks the first time you mention them: “The Tell-Tale Heart.”</div>' +
-      '<div class="callout"><strong>Remember:</strong> each body paragraph’s topic sentence <em>names the literary device</em> that paragraph analyzes and says what it shows. The paragraph then backs that claim up with evidence from the story and your own analysis. If you write a sixth paragraph, it follows the same pattern.</div>' +
+      '<div class="callout"><strong>Remember:</strong> each body paragraph’s topic sentence names the one point that paragraph proves (a literary device, a criterion, or a social theme, depending on your assignment) and says what it shows. The paragraph then backs that claim up with evidence from the story and, when your assignment requires them, your outside sources, plus your own analysis. Every additional paragraph follows the same pattern.</div>' +
       continueBtn("next-btn", "I understand the roadmap") + "</section>";
     document.getElementById("next-btn").addEventListener("click", function () { markComplete("roadmap"); goTo("evidence"); });
   }
@@ -1210,7 +1210,7 @@ textarea.coach-input:focus { outline: 3px solid var(--gold); border-color: var(-
       '<div class="cert-name">' + escapeHtml(state.certName) + "</div>" +
       '<p class="cert-detail">has successfully completed the <strong>MLA Evidence Integration Lab: Literature Edition</strong> and can:</p>' +
       "<ul>" +
-      "<li>Build body paragraphs that move from reason to evidence to analysis</li>" +
+      "<li>Build body paragraphs that move from topic sentence to evidence to analysis</li>" +
       "<li>Introduce quotations from a story with the author’s name and a present-tense verb</li>" +
       "<li>Tell the author, the narrator, and the characters apart when writing about fiction</li>" +
       "<li>Format MLA in-text citations with no “p.” and no comma before the page</li>" +
@@ -1296,12 +1296,12 @@ textarea.coach-input:focus { outline: 3px solid var(--gold); border-color: var(-
         comma: /,\s*(\d|p|pg|n\.d)/i.test(inner), hasPage: /\d+(\s*[-–]\s*\d+)?$/.test(inner) && !/\b(1[5-9]|20)\d{2}$/.test(inner) });
     }
 
-    if (evidence.length === 2) {
-      good.push("Found both quotations. Each paragraph needs two.");
+    if (evidence.length >= 2 && evidence.length <= 4) {
+      good.push("Found " + evidence.length + " quotations. Most body paragraphs need two or three, so check your assignment sheet for your number.");
     } else if (evidence.length < 2) {
-      issues.push("<strong>Two quotations:</strong> each paragraph needs <strong>two</strong> quotations from your sources. I found " + (evidence.length === 0 ? "none" : "only one") + ". (If you have one and it isn\u2019t showing up, check that it has quotation marks at both ends.)");
+      issues.push("<strong>Quotations:</strong> a body paragraph needs at least <strong>two</strong> quotations from your sources (your assignment may ask for three). I found " + (evidence.length === 0 ? "none" : "only one") + ". (If you have one and it isn\u2019t showing up, check that it has quotation marks at both ends.)");
     } else {
-      issues.push("<strong>Two quotations:</strong> each paragraph needs exactly two quotations, and I found " + evidence.length + ". Keep your two strongest and explain them in your own words.");
+      issues.push("<strong>Quotations:</strong> I found " + evidence.length + " quotations in one paragraph. That is a lot of borrowed words. Keep your strongest ones and explain each in your own words.");
     }
 
     /* citation format problems */
@@ -1481,7 +1481,7 @@ textarea.coach-input:focus { outline: 3px solid var(--gold); border-color: var(-
     if (!rows || !rows.length) return "";
     var sym = { ok: '<span class="ft ok" title="Looks right">\u2713</span>', no: '<span class="ft no" title="Missing or incorrect">\u2716</span>',
       warn: '<span class="ft warn" title="Check this">!</span>', na: '<span class="ft na" title="Not needed: author named and no page numbers">not needed</span>' };
-    return '<div class="formula-check"><strong>Evidence Formula Check</strong><p class="hint" style="margin:2px 0 8px">Your paragraph needs two quotations, and each one needs all four parts. \u2716 = missing or incorrect (see details below). ! = check this.</p>' +
+    return '<div class="formula-check"><strong>Evidence Formula Check</strong><p class="hint" style="margin:2px 0 8px">Each quotation in your paragraph needs all four parts. \u2716 = missing or incorrect (see details below). ! = check this.</p>' +
       '<table><thead><tr><th>Quotation</th><th>Signal phrase</th><th>Quotation marks</th><th>In-text citation</th><th>Period after citation</th></tr></thead><tbody>' +
       rows.map(function (r) {
         if (r.missing) return '<tr class="ft-missing"><td class="ft-q"><em>' + r.quote + "</em></td><td>" + sym.no + "</td><td>" + sym.no + "</td><td>" + sym.no + "</td><td>" + sym.no + "</td></tr>";
