@@ -431,54 +431,54 @@ textarea.coach-input:focus { outline: 3px solid var(--gold); border-color: var(-
       '<section class="card"><h2>Welcome</h2>' +
       "<p>This lab walks you through building literary analysis body paragraphs about a short story, where your <strong>reason</strong>, your <strong>evidence</strong>, and your <strong>analysis</strong> work together, with every quotation cited correctly in MLA style.</p>" +
       '<div class="callout gold"><strong>What is evidence?</strong> When you write with sources, the information you use from them in your essay is considered <strong>evidence</strong>. In a literary analysis essay, most of your evidence is the words of the story itself. In a research paper, you also use the words of literary critics and other outside sources. Either way, every piece of evidence needs a correct citation.</div>' +
-      '<div class="callout"><strong>The formula:</strong> Reason &rarr; Evidence &rarr; Analysis. Your <strong>reason</strong> is your topic sentence: one reason your thesis about the story is true. A paragraph that only quotes the story, without explaining what the author’s words show, isn’t doing its job yet.</div>' +
+      '<div class="callout"><strong>The formula:</strong> Reason &rarr; Evidence &rarr; Analysis. Your <strong>reason</strong> is your topic sentence: the literary device you are analyzing and what it shows about the story, in support of your thesis. A paragraph that only quotes the story, without explaining what the author’s words show, isn’t doing its job yet.</div>' +
       "<p>In this lab you will:</p>" +
       "<ul><li>Identify the parts of a literary analysis paragraph</li><li>Build quotation sentences that bring in the author’s words</li><li>Keep the author, the narrator, and the characters straight</li><li>Turn Works Cited entries (stories, anthologies, and critics) into correct in-text citations</li><li>Find the right page number to cite</li><li>Fix common citation mistakes</li></ul>" +
-      '<div class="callout"><strong>About the practice sources:</strong> The examples come from “The Tell-Tale Heart” by Edgar Allan Poe and “A Rose for Emily” by William Faulkner. The anthology, the critics, their articles, and every page number are made up for practice. In your own essay, cite the page numbers in <em>your</em> copy of the story, and quote the exact words from the version you cite. If your copy is adapted or simplified, its wording may differ from the original.</div>' +
+      '<div class="callout"><strong>About the practice sources:</strong> The examples come from “The Tell-Tale Heart” by Edgar Allan Poe and “A Rose for Emily” by William Faulkner. The anthology, the critics, their articles, and every page number are made up for practice. In your own essay, cite the page numbers in <em>your</em> copy of the story, and quote the exact words from the version you cite. If your copy is adapted or simplified, its wording may differ from the original. Your own essay (five to six paragraphs) will analyze the literary devices you chose in your literary matrix, so your analysis will look different from these examples.</div>' +
       "<p>When you finish, you’ll earn a certificate. After that, an optional <strong>Paragraph Checker</strong> is available if you’d like feedback on your own writing.</p>" +
       continueBtn("next-btn", "Begin") + "</section>";
     document.getElementById("next-btn").addEventListener("click", function () { markComplete("welcome"); goTo("parts"); });
   }
 
   /* ---------- 1. Parts ---------- */
-  var EXAMPLE_PARA = "Poe lets the narrator’s own words contradict his claim of sanity. Poe’s narrator insists, “I loved the old man” (53), even though he goes on to kill him. This contradiction suggests that the narrator’s calm explanation hides a mind fixed on a single obsession. Poe therefore invites readers to doubt anything the narrator claims about himself.";
+  var EXAMPLE_PARA = "Poe uses the narrator’s first-person point of view to show that his claim of sanity cannot be trusted. Poe’s narrator insists, “I loved the old man” (53), even though he goes on to kill him. This contradiction suggests that the narrator’s calm explanation hides a mind fixed on a single obsession. Poe therefore invites readers to doubt anything the narrator claims about himself.";
   function renderParts() {
     renderQuizModule({
       id: "parts", nextId: "roadmap", title: "1. Parts of an Analysis",
       intro:
         "<p>Every body paragraph in a literary essay is built from four moving parts:</p><ul>" +
-        "<li><strong>Thesis statement:</strong> your essay’s main claim about the story, usually the last sentence of your introduction. A good literary thesis is arguable: it says something about the story’s meaning, a character, a symbol, or the author’s technique that a reader could debate.</li>" +
-        "<li><strong>Topic sentence (your reason):</strong> the first sentence of a body paragraph. It states <em>one reason</em> your thesis is true, and the rest of the paragraph proves that reason.</li>" +
+        "<li><strong>Thesis statement:</strong> your essay’s main claim about the story, usually the last sentence of your introduction. A good literary thesis is arguable, and it usually names the literary devices you will analyze (chosen from your literary matrix) and what they show about the story’s meaning.</li>" +
+        "<li><strong>Topic sentence:</strong> the first sentence of a body paragraph. It names <em>one literary device</em> and says what it shows about the story, and the rest of the paragraph proves that claim.</li>" +
         "<li><strong>Evidence:</strong> the words you use from a source. In a literary analysis, that is usually a quotation (or paraphrase) from the story. In a research paper, it can also come from a critic or another outside source.</li>" +
         "<li><strong>Analysis:</strong> your own explanation of what the evidence shows and how the author’s choices create that meaning. This is the part students skip most often.</li></ul>" +
-        '<div class="callout gold"><strong>Thesis vs. topic sentence:</strong> your thesis makes the big claim about the story; each topic sentence gives one reason that backs it up.<ul>' +
-        "<li><em>Thesis:</em> The narrator of “The Tell-Tale Heart” cannot be trusted to tell his own story.</li>" +
-        "<li><em>Topic sentence (Reason 1):</em> Poe lets the narrator’s own words contradict his claim of sanity.</li>" +
-        "<li><em>Topic sentence (Reason 2):</em> Poe shows the narrator’s guilt overpowering his self-control by the end of the story.</li></ul>" +
-        "Test: put “because” between your thesis and your topic sentence. If it makes sense, your topic sentence is a reason.</div>" +
+        '<div class="callout gold"><strong>Thesis vs. topic sentence:</strong> your thesis makes the big claim about the story; each topic sentence takes one literary device and shows how it supports that claim.<ul>' +
+        "<li><em>Thesis:</em> In “The Tell-Tale Heart,” Poe uses point of view and symbolism to show that guilt cannot be silenced.</li>" +
+        "<li><em>Topic sentence (Device 1):</em> Poe uses the narrator’s first-person point of view to show that his claim of sanity cannot be trusted.</li>" +
+        "<li><em>Topic sentence (Device 2):</em> Poe uses the sound of the beating heart as a symbol of the narrator’s guilt overpowering his self-control.</li></ul>" +
+        "Test: a good topic sentence names one literary device and says what it shows about the story. If it only retells the plot, it isn’t doing its job yet.</div>" +
         '<div class="example-box"><span class="label">Example paragraph</span>' + EXAMPLE_PARA + "</div>",
       questions: [
         {
-          prompt: '<div class="example-box"><span class="label">Thesis</span>In “A Rose for Emily,” William Faulkner uses a narrator who speaks for the whole town to show that Miss Emily is treated more like a monument than a person.</div>Which sentence would work as a <strong>topic sentence</strong> for a body paragraph? (Remember: it should be a reason that backs up the thesis.)',
+          prompt: '<div class="example-box"><span class="label">Thesis</span>In “A Rose for Emily,” William Faulkner uses point of view and symbolism to show that Miss Emily is treated more like a monument than a person.</div>Which sentence would work as a <strong>topic sentence</strong> for a body paragraph? (Remember: it should name one literary device and say what it shows, in a way that backs up the thesis.)',
           options: [
-            { text: "William Faulkner was born in Mississippi in 1897.", why: "That’s a biographical fact, not a reason. It doesn’t explain why the thesis is true." },
-            { text: "Faulkner opens the story by describing Miss Emily’s funeral as an event for the whole town.", correct: true, why: "It gives a reason the thesis is true. The “because” test works: Miss Emily is treated like a monument <em>because</em> the story opens with her funeral as a public event." },
+            { text: "William Faulkner was born in Mississippi in 1897.", why: "That’s a biographical fact, not a claim about a literary device." },
+            { text: "Faulkner uses the town’s collective point of view to show that Miss Emily is a public symbol more than a private person.", correct: true, why: "It names a literary device (point of view) and says what it shows, so it backs up the thesis." },
             { text: "The narrator says the men attended the funeral out of “a sort of respectful affection for a fallen monument” (118).", why: "That’s evidence. A topic sentence is your own claim, in your own words, before any quotation." },
-            { text: "The town truly cares about Miss Emily and only wants to protect her.", why: "That’s a different interpretation from the one your thesis claims. A topic sentence should give a reason that backs up <em>your</em> thesis." }
+            { text: "Many readers enjoy the story’s shocking ending.", why: "That’s a personal reaction, not a claim about how a literary device creates meaning." }
           ]
         },
         {
-          prompt: "Now look at the example paragraph. Which sentence is the <strong>topic sentence</strong> (the reason)?",
+          prompt: "Now look at the example paragraph. Which sentence is the <strong>topic sentence</strong> (the claim about a literary device)?",
           options: [
             { text: "Poe’s narrator insists, “I loved the old man” (53), even though he goes on to kill him.", why: "That sentence is the evidence. It brings in a quotation from the story." },
-            { text: "Poe lets the narrator’s own words contradict his claim of sanity.", correct: true, why: "It opens the paragraph and states the one reason this paragraph will prove." },
+            { text: "Poe uses the narrator’s first-person point of view to show that his claim of sanity cannot be trusted.", correct: true, why: "It opens the paragraph and names the one literary device this paragraph will analyze." },
             { text: "Poe therefore invites readers to doubt anything the narrator claims about himself.", why: "That is the closing sentence. It ties the paragraph back to the bigger claim." }
           ]
         },
         {
           prompt: "Which sentence in the example is the <strong>analysis</strong>?",
           options: [
-            { text: "Poe lets the narrator’s own words contradict his claim of sanity.", why: "That is the topic sentence. Look for the sentence that explains what the quotation shows." },
+            { text: "Poe uses the narrator’s first-person point of view to show that his claim of sanity cannot be trusted.", why: "That is the topic sentence. Look for the sentence that explains what the quotation shows." },
             { text: "Poe’s narrator insists, “I loved the old man” (53), even though he goes on to kill him.", why: "That is the evidence itself. Analysis comes after it and explains it." },
             { text: "This contradiction suggests that the narrator’s calm explanation hides a mind fixed on a single obsession.", correct: true, why: "It doesn’t repeat the quote or add new evidence. It explains what the quote shows about the narrator, and that’s analysis." },
             { text: "Poe therefore invites readers to doubt anything the narrator claims about himself.", why: "That sentence extends the paragraph’s claim. Analysis explains the meaning of the evidence." }
@@ -495,13 +495,14 @@ textarea.coach-input:focus { outline: 3px solid var(--gold); border-color: var(-
       "<p>Here’s where your paragraphs fit in the whole essay:</p>" +
       '<div class="roadmap">' +
       '<div class="roadmap-step">Introduction<small>+ Thesis</small></div><div class="roadmap-arrow">&rarr;</div>' +
-      '<div class="roadmap-step">Body Paragraph 1<small>Reason 1</small></div><div class="roadmap-arrow">&rarr;</div>' +
-      '<div class="roadmap-step">Body Paragraph 2<small>Reason 2</small></div><div class="roadmap-arrow">&rarr;</div>' +
-      '<div class="roadmap-step">Body Paragraph 3<small>Reason 3</small></div><div class="roadmap-arrow">&rarr;</div>' +
+      '<div class="roadmap-step">Body Paragraph 1<small>Device 1</small></div><div class="roadmap-arrow">&rarr;</div>' +
+      '<div class="roadmap-step">Body Paragraph 2<small>Device 2</small></div><div class="roadmap-arrow">&rarr;</div>' +
+      '<div class="roadmap-step">Body Paragraph 3<small>Device 3 (and 4)</small></div><div class="roadmap-arrow">&rarr;</div>' +
       '<div class="roadmap-step">Conclusion<small>Wrap-up</small></div>' +
       "</div>" +
+      '<div class="callout gold"><strong>Your essay is five to six paragraphs:</strong> an introduction, three or four body paragraphs, and a conclusion. Each body paragraph focuses on one literary device you chose from your literary matrix (for example symbolism, imagery, irony, point of view, characterization, or setting). Your devices and your analysis will be different from your classmates’, so the examples in this lab show the pattern, not the answer.</div>' +
       '<div class="callout"><strong>Your introduction</strong> names the author and the title of the story, gives a little context, and ends with your thesis. Story titles go in quotation marks the first time you mention them: “The Tell-Tale Heart.”</div>' +
-      '<div class="callout"><strong>Remember:</strong> each body paragraph’s topic sentence <em>is</em> its reason. Body Paragraph 1 opens with Reason 1, Body Paragraph 2 with Reason 2, and Body Paragraph 3 with Reason 3. Each paragraph then backs that reason up with evidence from the story and your own analysis.</div>' +
+      '<div class="callout"><strong>Remember:</strong> each body paragraph’s topic sentence <em>names the literary device</em> that paragraph analyzes and says what it shows. The paragraph then backs that claim up with evidence from the story and your own analysis. If you write a sixth paragraph, it follows the same pattern.</div>' +
       continueBtn("next-btn", "I understand the roadmap") + "</section>";
     document.getElementById("next-btn").addEventListener("click", function () { markComplete("roadmap"); goTo("evidence"); });
   }
@@ -1381,22 +1382,22 @@ textarea.coach-input:focus { outline: 3px solid var(--gold); border-color: var(-
     if (type === "body") {
       var tsProblems = 0;
       if (/[“"]/.test(fs) || /\([^()]*\d[^()]*\)|\([A-Z][^()]*\)/.test(fs)) {
-        issues.push("<strong>Topic sentence:</strong> your paragraph opens with a quotation or citation (" + fsShown + "). Start with your own topic sentence: one reason your thesis about the story is true, in your own words. Bring in evidence after that."); tsProblems++;
+        issues.push("<strong>Topic sentence:</strong> your paragraph opens with a quotation or citation (" + fsShown + "). Start with your own topic sentence: name the literary device you are analyzing and what it shows about the story, in your own words. Bring in evidence after that."); tsProblems++;
       }
       if (/\?\s*$/.test(fs)) {
-        issues.push("<strong>Topic sentence:</strong> your first sentence is a question. Turn it into a statement that gives one reason your thesis is true."); tsProblems++;
+        issues.push("<strong>Topic sentence:</strong> your first sentence is a question. Turn it into a statement that names a literary device and what it shows."); tsProblems++;
       }
       if (/\b(in this paragraph|this paragraph (will|is about|discusses)|i will (discuss|talk about|explain|show)|i am going to)\b/i.test(fs)) {
-        issues.push("<strong>Topic sentence:</strong> skip announcing what the paragraph will do (" + fsShown + "). Just state your reason directly."); tsProblems++;
+        issues.push("<strong>Topic sentence:</strong> skip announcing what the paragraph will do (" + fsShown + "). Just state your claim directly."); tsProblems++;
       }
       if (!tsProblems && fs.split(/\s+/).length < 6) {
-        issues.push("<strong>Topic sentence:</strong> your first sentence is very short. Make sure it clearly states one reason that supports your thesis."); tsProblems++;
+        issues.push("<strong>Topic sentence:</strong> your first sentence is very short. Make sure it names a literary device and says what it shows."); tsProblems++;
       }
       var th = (thesis || "").trim();
       if (th.split(/\s+/).length >= 5) {
         var shared = sharedKeyWords(th, fs);
         if (!shared.length) {
-          issues.push("<strong>Topic sentence:</strong> " + fsShown + " doesn’t share any key words with your thesis. Try the “because” test: <em>[your thesis] because [your topic sentence]</em>. If it doesn’t make sense, revise so your reason clearly connects to your thesis."); tsProblems++;
+          issues.push("<strong>Topic sentence:</strong> " + fsShown + " doesn’t share any key words with your thesis. Check that your topic sentence names a literary device from your thesis and connects clearly to it."); tsProblems++;
         } else if (!tsProblems) {
           good.push("Your topic sentence connects to your thesis (both mention “" + escapeHtml(shared.slice(0, 2).join("” and “")) + "”).");
         }
